@@ -6,6 +6,8 @@ export const theme = (() => {
     const THEME_LIGHT = 'light';
 
     let isAuto = false;
+    let observerLight = null;
+    let observerDark = null;
     const theme = storage('theme');
 
     const toLight = (element) => {
@@ -92,49 +94,29 @@ export const theme = (() => {
         }
     };
 
-    const observerLight = new IntersectionObserver((es, o) => {
-        es.forEach((e) => {
-            if (e.isIntersecting) {
-                toLight(e.target);
-            }
-        });
-
-        es.forEach((e) => {
-            if (!e.isIntersecting) {
-                toLight(e.target);
-            }
-        });
-
-        o.disconnect();
-    });
-
-    const observerDark = new IntersectionObserver((es, o) => {
-        es.forEach((e) => {
-            if (e.isIntersecting) {
-                toDark(e.target);
-            }
-        });
-
-        es.forEach((e) => {
-            if (!e.isIntersecting) {
-                toDark(e.target);
-            }
-        });
-
-        o.disconnect();
-    });
-
     const onLight = () => {
         theme.set('active', THEME_LIGHT);
         document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
 
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
+
+        let countChange = 0;
+        elements.forEach((el) => {
+            el.addEventListener('transitionend', (e) => {
+                if (el.isEqualNode(e.target) && (e.propertyName === 'background-color' || e.propertyName === 'color')) {
+                    countChange += 1;
+
+                    if (elements.length === countChange) {
+                        // --bs-body-bg
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+                    }
+                }
+            });
+        });
+
         elements.forEach((el) => {
             observerLight.observe(el);
         });
-
-        // --bs-body-bg
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
     };
 
     const onDark = () => {
@@ -142,12 +124,24 @@ export const theme = (() => {
         document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
+
+        let countChange = 0;
+        elements.forEach((el) => {
+            el.addEventListener('transitionend', (e) => {
+                if (el.isEqualNode(e.target) && (e.propertyName === 'background-color' || e.propertyName === 'color')) {
+                    countChange += 1;
+
+                    if (elements.length === countChange) {
+                        // --bs-body-bg
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#212529');
+                    }
+                }
+            });
+        });
+
         elements.forEach((el) => {
             observerDark.observe(el);
         });
-
-        // --bs-body-bg
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#212529');
     };
 
     const isDarkMode = (onDark = null, onLight = null) => {
@@ -177,6 +171,38 @@ export const theme = (() => {
     };
 
     const init = () => {
+        observerLight = new IntersectionObserver((es, o) => {
+            es.forEach((e) => {
+                if (e.isIntersecting) {
+                    toLight(e.target);
+                }
+            });
+
+            es.forEach((e) => {
+                if (!e.isIntersecting) {
+                    toLight(e.target);
+                }
+            });
+
+            o.disconnect();
+        });
+
+        observerDark = new IntersectionObserver((es, o) => {
+            es.forEach((e) => {
+                if (e.isIntersecting) {
+                    toDark(e.target);
+                }
+            });
+
+            es.forEach((e) => {
+                if (!e.isIntersecting) {
+                    toDark(e.target);
+                }
+            });
+
+            o.disconnect();
+        });
+
         if (!theme.has('active')) {
             theme.set('active', THEME_LIGHT);
 

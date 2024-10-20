@@ -33,13 +33,13 @@ export const offline = (() => {
     const setOffline = () => {
         alert.firstElementChild.firstElementChild.classList.remove('bg-success');
         alert.firstElementChild.firstElementChild.classList.add('bg-danger');
-        alert.firstElementChild.firstElementChild.firstElementChild.innerText = 'Koneksi tidak tersedia';
+        alert.firstElementChild.firstElementChild.firstElementChild.innerHTML = '<i class="fa-solid fa-ban me-1"></i>Koneksi tidak tersedia';
     };
 
     const setOnline = () => {
         alert.firstElementChild.firstElementChild.classList.remove('bg-danger');
         alert.firstElementChild.firstElementChild.classList.add('bg-success');
-        alert.firstElementChild.firstElementChild.firstElementChild.innerText = 'Koneksi tersedia kembali';
+        alert.firstElementChild.firstElementChild.firstElementChild.innerHTML = '<i class="fa-solid fa-cloud me-1"></i>Koneksi tersedia kembali';
     };
 
     const onOffline = () => {
