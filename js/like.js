@@ -6,7 +6,7 @@ import { request, HTTP_PATCH, HTTP_POST } from './request.js';
 
 export const like = (() => {
 
-    const likes = storage('likes');
+    let likes = null;
 
     const like = async (button) => {
         const id = button.getAttribute('data-uuid');
@@ -55,7 +55,7 @@ export const like = (() => {
         button.disabled = false;
     };
 
-    const animation = (card) => {
+    const animation = (div) => {
         if (!confetti) {
             return;
         }
@@ -63,7 +63,7 @@ export const like = (() => {
         const end = Date.now() + 25;
         const colors = ['#ff69b4', '#ff1493'];
 
-        const yPosition = Math.max(0.3, Math.min(1, (card.getBoundingClientRect().top / window.innerHeight) + 0.2));
+        const yPosition = Math.max(0.3, Math.min(1, (div.getBoundingClientRect().top / window.innerHeight) + 0.2));
 
         const heart = confetti.shapeFromPath({
             path: 'M167 72c19,-38 37,-56 75,-56 42,0 76,33 76,75 0,76 -76,151 -151,227 -76,-76 -151,-151 -151,-227 0,-42 33,-75 75,-75 38,0 57,18 76,56z',
@@ -100,7 +100,7 @@ export const like = (() => {
     };
 
     const tapTap = async (div) => {
-        const currentTime = (new Date()).getTime();
+        const currentTime = Date.now();
         const tapLength = currentTime - parseInt(div.getAttribute('data-tapTime'));
         const uuid = div.id.replace('body-content-', '');
 
@@ -117,7 +117,12 @@ export const like = (() => {
         div.setAttribute('data-tapTime', currentTime);
     };
 
+    const init = () => {
+        likes = storage('likes');
+    };
+
     return {
+        init,
         like,
         tapTap,
     };

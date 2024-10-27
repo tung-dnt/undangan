@@ -28,7 +28,3 @@ svg>path {
 .bg-theme-dark {
     background-color: var(--bs-gray-800);
 }
-
-.card-body {
-    overflow-wrap: break-word !important;
-}

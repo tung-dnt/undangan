@@ -5,10 +5,10 @@ export const theme = (() => {
     const THEME_DARK = 'dark';
     const THEME_LIGHT = 'light';
 
+    let theme = null;
     let isAuto = false;
     let observerLight = null;
     let observerDark = null;
-    const theme = storage('theme');
 
     const toLight = (element) => {
         if (element.classList.contains('text-light')) {
@@ -133,7 +133,7 @@ export const theme = (() => {
 
                     if (elements.length === countChange) {
                         // --bs-body-bg
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#212529');
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
                     }
                 }
             });
@@ -171,6 +171,8 @@ export const theme = (() => {
     };
 
     const init = () => {
+        theme = storage('theme');
+
         observerLight = new IntersectionObserver((es, o) => {
             es.forEach((e) => {
                 if (e.isIntersecting) {

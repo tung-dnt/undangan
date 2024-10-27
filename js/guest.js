@@ -3,11 +3,13 @@ import { audio } from './audio.js';
 import { theme } from './theme.js';
 import { session } from './session.js';
 import { storage } from './storage.js';
+import { comment } from './comment.js';
+import { progress } from './progress.js';
 import { confetti } from './confetti.js';
 
 export const guest = (() => {
 
-    const information = storage('information');
+    let information = null;
 
     const countDownDate = () => {
         const until = document.getElementById('count-down')?.getAttribute('data-time')?.replace(' ', 'T');
@@ -18,7 +20,7 @@ export const guest = (() => {
         const count = (new Date(until)).getTime();
 
         setInterval(() => {
-            const distance = Math.abs(count - (new Date()).getTime());
+            const distance = Math.abs(count - Date.now());
 
             document.getElementById('day').innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
             document.getElementById('hour').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -109,7 +111,11 @@ export const guest = (() => {
     };
 
     const init = () => {
+        session.init();
+        comment.init();
+
         countDownDate();
+        information = storage('information');
 
         if (session.isAdmin()) {
             storage('user').clear();
@@ -146,7 +152,11 @@ export const guest = (() => {
             return;
         }
 
-        session.guest();
+        progress.add();
+        session.guest()
+            .then(() => comment.comment())
+            .then(() => progress.complete('comment'))
+            .catch(() => progress.invalid('comment'));
     };
 
     return {

@@ -6,12 +6,12 @@ import { pagination } from './pagination.js';
 
 export const card = (() => {
 
-    const user = storage('user');
-    const owns = storage('owns');
-    const likes = storage('likes');
-    const config = storage('config');
-    const tracker = storage('tracker');
-    const showHide = storage('comment');
+    let user = null;
+    let owns = null;
+    let likes = null;
+    let config = null;
+    let tracker = null;
+    let showHide = null;
 
     const renderLoading = () => {
         const comments = document.getElementById('comments');
@@ -21,13 +21,13 @@ export const card = (() => {
 
         comments.setAttribute('data-loading', 'true');
         comments.innerHTML = `
-        <div class="card-body bg-theme-${theme.isDarkMode('dark', 'light')} shadow p-3 mx-0 mt-0 mb-3 rounded-4">
+        <div class="bg-theme-${theme.isDarkMode('dark', 'light')} shadow p-3 mx-0 mt-0 mb-3 rounded-4">
             <div class="d-flex flex-wrap justify-content-between align-items-center placeholder-wave">
                 <span class="placeholder bg-secondary col-5 rounded-3 my-1"></span>
                 <span class="placeholder bg-secondary col-3 rounded-3 my-1"></span>
             </div>
             <hr class="text-${theme.isDarkMode('light', 'dark')} my-1">
-            <p class="card-text placeholder-wave">
+            <p class="placeholder-wave m-0">
                 <span class="placeholder bg-secondary col-6 rounded-3"></span>
                 <span class="placeholder bg-secondary col-5 rounded-3"></span>
                 <span class="placeholder bg-secondary col-12 rounded-3 my-1"></span>
@@ -119,10 +119,10 @@ export const card = (() => {
         const btn = theme.isDarkMode('dark', 'light');
 
         if (is_parent) {
-            return `class="card-body bg-theme-${btn} shadow p-3 mx-0 mt-0 mb-3 rounded-4" data-parent="true"`;
+            return `class="bg-theme-${btn} shadow p-3 mx-0 mt-0 mb-3 rounded-4" data-parent="true"`;
         }
 
-        return `class="${!showHide.get('hidden').find((item) => item.uuid === comment.uuid)['show'] ? 'd-none' : ''} card-body overflow-x-scroll mw-100 border-start bg-theme-${btn} py-2 ps-2 pe-0 my-2 ms-2 me-0"`;
+        return `class="${!showHide.get('hidden').find((item) => item.uuid === comment.uuid)['show'] ? 'd-none' : ''} overflow-x-scroll mw-100 border-start bg-theme-${btn} py-2 ps-2 pe-0 my-2 ms-2 me-0"`;
     };
 
     const renderTitle = (comment, is_parent) => {
@@ -151,7 +151,7 @@ export const card = (() => {
 
     const renderContent = (comment, is_parent) => {
         return `
-        <div ${renderHeader(comment, is_parent)} id="${comment.uuid}">
+        <div ${renderHeader(comment, is_parent)} id="${comment.uuid}" style="overflow-wrap: break-word !important;">
             <div id="body-content-${comment.uuid}" data-tapTime="0" data-liked="false" ontouchend="like.tapTap(this)">
             ${renderBody(comment, is_parent)}
             </div>
@@ -200,7 +200,17 @@ export const card = (() => {
         return inner;
     };
 
+    const init = () => {
+        user = storage('user');
+        owns = storage('owns');
+        likes = storage('likes');
+        config = storage('config');
+        tracker = storage('tracker');
+        showHide = storage('comment');
+    };
+
     return {
+        init,
         renderEdit,
         renderReply,
         renderLoading,

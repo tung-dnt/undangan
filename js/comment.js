@@ -1,5 +1,6 @@
 import { dto } from './dto.js';
 import { card } from './card.js';
+import { like } from './like.js';
 import { util } from './util.js';
 import { theme } from './theme.js';
 import { session } from './session.js';
@@ -9,10 +10,10 @@ import { request, HTTP_GET, HTTP_POST, HTTP_DELETE, HTTP_PUT } from './request.j
 
 export const comment = (() => {
 
-    const owns = storage('owns');
-    const user = storage('user');
-    const tracker = storage('tracker');
-    const showHide = storage('comment');
+    let owns = null;
+    let user = null;
+    let tracker = null;
+    let showHide = null;
 
     const changeButton = (id, disabled) => {
         const buttonMethod = ['reply', 'edit', 'remove'];
@@ -450,7 +451,18 @@ export const comment = (() => {
 
     const scroll = () => document.getElementById('comments').scrollIntoView({ behavior: 'smooth' });
 
+    const init = () => {
+        like.init();
+        card.init();
+
+        owns = storage('owns');
+        user = storage('user');
+        tracker = storage('tracker');
+        showHide = storage('comment');
+    };
+
     return {
+        init,
         scroll,
         cancel,
         send,

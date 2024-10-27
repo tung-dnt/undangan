@@ -29,16 +29,16 @@ export const audio = (() => {
         music.disabled = false;
     };
 
-    const button = async (button) => {
+    const button = async () => {
         if (!isPlay) {
             await play();
-            button.innerHTML = '<i class="fa-solid fa-circle-pause spin-button"></i>';
+            music.innerHTML = '<i class="fa-solid fa-circle-pause spin-button"></i>';
             return;
         }
 
         isPlay = false;
         audio.pause();
-        button.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
+        music.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
     };
 
     const showButton = () => {

@@ -1,6 +1,6 @@
 export const offline = (() => {
 
-    const alert = document.getElementById('offline-mode');
+    let alert = null;
 
     const show = (isUp) => {
         return new Promise((res) => {
@@ -62,6 +62,7 @@ export const offline = (() => {
     const init = () => {
         window.addEventListener('online', onOnline);
         window.addEventListener('offline', onOffline);
+        alert = document.getElementById('offline-mode');
     };
 
     return {

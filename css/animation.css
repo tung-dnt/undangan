@@ -18,12 +18,13 @@
 .mouse-animation>.scroll-animation {
     width: 0.25rem;
     height: 0.625rem;
-    border-radius: 25%;
-    background-color: #808080;
-    animation-name: scroll;
-    animation-duration: 2.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
+    background-color: rgb(192, 192, 192);
+    animation: scroll 3s linear infinite;
+}
+
+.mouse-animation {
+    height: 2rem;
+    box-sizing: content-box;
 }
 
 @keyframes spin-icon {
@@ -48,12 +49,4 @@
 
 .animate-love {
     animation: love 5s ease-in-out infinite;
-}
-
-.mouse-animation {
-    padding: 0.25rem 0.625rem;
-    height: 2rem;
-    border-radius: 1.4rem;
-    opacity: 0.75;
-    box-sizing: content-box;
 }

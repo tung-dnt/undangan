@@ -1,29 +1,17 @@
 import { dto } from './dto.js';
-import { util } from './util.js';
-import { admin } from './admin.js';
 import { storage } from './storage.js';
-import { comment } from './comment.js';
 import { progress } from './progress.js';
-import { bootstrap } from './bootstrap.js';
 import { request, HTTP_POST, HTTP_GET } from './request.js';
 
 export const session = (() => {
 
-    const session = storage('session');
+    let session = null;
 
     const getToken = () => session.get('token');
 
-    const login = async (button) => {
-
-        const btn = util.disableButton(button);
-        const formEmail = document.getElementById('loginEmail');
-        const formPassword = document.getElementById('loginPassword');
-
-        formEmail.disabled = true;
-        formPassword.disabled = true;
-
-        const res = await request(HTTP_POST, '/api/session')
-            .body(dto.postSessionRequest(formEmail.value, formPassword.value))
+    const login = (body) => {
+        return request(HTTP_POST, '/api/session')
+            .body(body)
             .send(dto.tokenResponse)
             .then((res) => {
                 if (res.code === 200) {
@@ -33,28 +21,10 @@ export const session = (() => {
                 return res;
             })
             .then((res) => res.code === 200, () => false);
-
-        if (res) {
-            admin.getUserDetail();
-            admin.getStatUser();
-            comment.comment();
-            bootstrap.Modal.getOrCreateInstance('#loginModal').hide();
-            formEmail.value = null;
-            formPassword.value = null;
-        }
-
-        btn.restore();
-        formEmail.disabled = false;
-        formPassword.disabled = false;
     };
 
     const logout = () => {
-        if (!confirm('Are you sure?')) {
-            return;
-        }
-
         session.unset('token');
-        (new bootstrap.Modal('#loginModal')).show();
     };
 
     const isAdmin = () => {
@@ -63,7 +33,7 @@ export const session = (() => {
 
     const guest = () => {
         progress.add();
-        request(HTTP_GET, '/api/config')
+        return request(HTTP_GET, '/api/config')
             .token(document.body.getAttribute('data-key'))
             .send()
             .then(async (res) => {
@@ -78,15 +48,18 @@ export const session = (() => {
                 }
 
                 session.set('token', document.body.getAttribute('data-key'));
-                await comment.comment();
-
                 progress.complete('request');
             }).catch(() => {
                 progress.invalid('request');
             });
     };
 
+    const init = () => {
+        session = storage('session');
+    };
+
     return {
+        init,
         guest,
         login,
         logout,

@@ -8,7 +8,7 @@ import { request, HTTP_GET, HTTP_PATCH, HTTP_PUT } from './request.js';
 
 export const admin = (() => {
 
-    const user = storage('user');
+    let user = null;
 
     const getUserDetail = () => {
         request(HTTP_GET, '/api/user').token(session.getToken()).send().then((res) => {
@@ -201,7 +201,56 @@ export const admin = (() => {
         }
     };
 
+    const buttonNavHome = (btn) => {
+        bootstrap.Tab.getOrCreateInstance(document.getElementById('button-home')).show();
+        btn.classList.add('active');
+        document.getElementById('button-mobile-setting').classList.remove('active');
+    };
+
+    const buttonNavSetting = (btn) => {
+        bootstrap.Tab.getOrCreateInstance(document.getElementById('button-setting')).show();
+        btn.classList.add('active');
+        document.getElementById('button-mobile-home').classList.remove('active');
+    };
+
+    const login = async (button) => {
+        const btn = util.disableButton(button);
+        const formEmail = document.getElementById('loginEmail');
+        const formPassword = document.getElementById('loginPassword');
+
+        formEmail.disabled = true;
+        formPassword.disabled = true;
+
+        const res = await session.login(dto.postSessionRequest(formEmail.value, formPassword.value));
+        if (res) {
+            getUserDetail();
+            getStatUser();
+            comment.comment();
+            bootstrap.Modal.getOrCreateInstance('#loginModal').hide();
+            formEmail.value = null;
+            formPassword.value = null;
+        }
+
+        btn.restore();
+        formEmail.disabled = false;
+        formPassword.disabled = false;
+    };
+
+    const logout = () => {
+        if (!confirm('Are you sure?')) {
+            return;
+        }
+
+        session.logout();
+        bootstrap.Modal.getOrCreateInstance('#loginModal').show();
+    };
+
     const init = () => {
+        session.init();
+        comment.init();
+
+        user = storage('user');
+
         if (!session.isAdmin()) {
             storage('owns').clear();
             storage('likes').clear();
@@ -211,8 +260,8 @@ export const admin = (() => {
             storage('information').clear();
         }
 
-        if (!session.isAdmin() || (JSON.parse(atob((session.getToken() ?? '.').split('.')[1])).exp ?? 0) < ((new Date()).getTime() / 1000)) {
-            (new bootstrap.Modal('#loginModal')).show();
+        if (!session.isAdmin() || (JSON.parse(atob((session.getToken() ?? '.').split('.')[1])).exp ?? 0) < (Date.now() / 1000)) {
+            bootstrap.Modal.getOrCreateInstance('#loginModal').show();
             return;
         }
 
@@ -223,6 +272,8 @@ export const admin = (() => {
 
     return {
         init,
+        login,
+        logout,
         getUserDetail,
         getStatUser,
         changeFilterBadWord,
@@ -234,6 +285,8 @@ export const admin = (() => {
         download,
         changeName,
         enableButtonName,
-        enableButtonPassword
+        enableButtonPassword,
+        buttonNavHome,
+        buttonNavSetting
     };
 })();

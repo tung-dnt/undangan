@@ -66,7 +66,7 @@ export const util = (() => {
 
     const modal = (img) => {
         document.getElementById('show-modal-image').src = img.src;
-        (new bootstrap.Modal('#modal-image')).show();
+        bootstrap.Modal.getOrCreateInstance('#modal-image').show();
     };
 
     const copy = async (button, message = null, timeout = 1500) => {

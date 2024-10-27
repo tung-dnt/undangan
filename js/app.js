@@ -9,17 +9,16 @@ import { progress } from './progress.js';
 import { pagination } from './pagination.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    audio.init();
     theme.init();
-    pagination.init();
-
+    audio.init();
     guest.init();
     offline.init();
     progress.init();
+    pagination.init();
     window.AOS.init();
 
-    window.util = util;
     window.like = like;
+    window.util = util;
     window.guest = guest;
     window.theme = theme;
     window.audio = audio;

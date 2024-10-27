@@ -18,30 +18,21 @@
     font-family: 'Noto Naskh Arabic', serif !important;
 }
 
-.img-crop {
+.img-center-crop {
     width: 15rem;
     height: 15rem;
-    position: relative;
-    overflow: hidden;
-    border-radius: 50%;
-}
-
-.img-crop>img {
-    display: inline;
-    margin: 0 auto;
-    height: auto;
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 .btn-music {
-    position: fixed;
     bottom: 9vh !important;
     right: 2vh !important;
     z-index: 1055 !important;
 }
 
 .btn-theme {
-    position: fixed;
     bottom: 15vh !important;
     right: 2vh !important;
     z-index: 1055 !important;
@@ -69,13 +60,8 @@
 }
 
 .bg-cover-home {
-    position: absolute;
-    opacity: 0.2;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     height: 100%;
-    width: 100vw;
+    width: 100%;
     object-fit: cover;
     mask-image: linear-gradient(to bottom, black, black, black, black, black, transparent);
 }
