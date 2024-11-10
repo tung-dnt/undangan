@@ -93,7 +93,6 @@ export const guest = (() => {
 
     const open = (button) => {
         button.disabled = true;
-        document.body.style.overflowY = 'scroll';
         document.body.scrollIntoView({ behavior: 'instant' });
 
         confetti({
