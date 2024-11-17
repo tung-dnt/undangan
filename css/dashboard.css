@@ -22,6 +22,7 @@
 @media screen and (width <=767px) {
     html {
         scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
     }
 }
 
