@@ -90,7 +90,7 @@ export const card = (() => {
 
     const renderReadMore = (uuid, comments) => {
         const hasId = showHide.get('show').includes(uuid);
-        return `<a style="font-size: 0.8rem;" onclick="comment.showOrHide(this)" data-uuid="${uuid}" data-uuids="${comments.join(',')}" data-show="${hasId ? 'true' : 'false'}" role="button" class="me-auto ms-1 py-0">${hasId ? 'Hide replies' : `Show replies (${comments.length})`}</a>`;
+        return `<a class="text-light" style="font-size: 0.8rem;" onclick="comment.showOrHide(this)" data-uuid="${uuid}" data-uuids="${comments.join(',')}" data-show="${hasId ? 'true' : 'false'}" role="button" class="me-auto ms-1 py-0">${hasId ? 'Hide replies' : `Show replies (${comments.length})`}</a>`;
     };
 
     const renderButton = (comment) => {
@@ -146,7 +146,7 @@ export const card = (() => {
             <small class="text-${text} m-0 p-0" style="font-size: 0.75rem;">${comment.created_at}</small>
         </div>
         <hr class="text-${text} my-1">
-        <p class="text-${text} mt-0 mb-1 mx-0 p-0" style="white-space: pre-wrap !important; font-size: 0.95rem;" id="content-${comment.uuid}">${convertMarkdownToHTML(util.escapeHtml(comment.comment))}</p>`;
+        <p class="text-${text} my-1 mx-0 p-0" style="white-space: pre-wrap !important; font-size: 0.95rem;" id="content-${comment.uuid}">${convertMarkdownToHTML(util.escapeHtml(comment.comment))}</p>`;
     };
 
     const renderContent = (comment, is_parent) => {

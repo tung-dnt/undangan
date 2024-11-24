@@ -103,26 +103,24 @@ export const theme = (() => {
     const onLight = () => {
         theme.set('active', THEME_LIGHT);
         document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
-        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
 
+        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
 
         let countChange = 0;
         elements.forEach((el) => {
-            el.addEventListener('transitionend', (e) => {
+            const callback = (e) => {
                 if (el.isEqualNode(e.target) && (e.propertyName === 'background-color' || e.propertyName === 'color')) {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        let color = now;
-                        if (now === '#000000' || now === '#212529') {
-                            color = themeColors[now];
-                        }
-
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
                     }
                 }
-            });
+            };
+
+            el.removeEventListener('transitionend', callback);
+            el.addEventListener('transitionend', callback);
         });
 
         elements.forEach((el) => {
@@ -133,26 +131,24 @@ export const theme = (() => {
     const onDark = () => {
         theme.set('active', THEME_DARK);
         document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
-        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
 
+        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
 
         let countChange = 0;
         elements.forEach((el) => {
-            el.addEventListener('transitionend', (e) => {
+            const callback = (e) => {
                 if (el.isEqualNode(e.target) && (e.propertyName === 'background-color' || e.propertyName === 'color')) {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        let color = now;
-                        if (now === '#FFFFFF' || now === '#F8F9FA') {
-                            color = themeColors[now];
-                        }
-
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', (now === '#FFFFFF' || now === '#F8F9FA') ? themeColors[now] : now);
                     }
                 }
-            });
+            };
+
+            el.removeEventListener('transitionend', callback);
+            el.addEventListener('transitionend', callback);
         });
 
         elements.forEach((el) => {
@@ -190,11 +186,11 @@ export const theme = (() => {
         const observerTop = new IntersectionObserver((es) => {
             es.forEach((e) => {
                 if (e.isIntersecting) {
-                    if (['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))) {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode('#000000', '#FFFFFF'));
-                    } else {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode('#212529', '#F8F9FA'));
-                    }
+                    const themeColor = ['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))
+                        ? isDarkMode('#000000', '#FFFFFF')
+                        : isDarkMode('#212529', '#F8F9FA');
+
+                    document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
                 }
             });
         }, {
