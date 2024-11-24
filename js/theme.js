@@ -4,6 +4,12 @@ export const theme = (() => {
 
     const THEME_DARK = 'dark';
     const THEME_LIGHT = 'light';
+    const themeColors = {
+        '#000000': '#FFFFFF',
+        '#FFFFFF': '#000000',
+        '#212529': '#F8F9FA',
+        '#F8F9FA': '#212529'
+    };
 
     let theme = null;
     let isAuto = false;
@@ -97,6 +103,7 @@ export const theme = (() => {
     const onLight = () => {
         theme.set('active', THEME_LIGHT);
         document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
+        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
 
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
 
@@ -107,8 +114,7 @@ export const theme = (() => {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        // --bs-body-bg
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff');
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColors[now]);
                     }
                 }
             });
@@ -122,6 +128,7 @@ export const theme = (() => {
     const onDark = () => {
         theme.set('active', THEME_DARK);
         document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
+        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
 
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
 
@@ -132,8 +139,7 @@ export const theme = (() => {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        // --bs-body-bg
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColors[now]);
                     }
                 }
             });
@@ -168,6 +174,26 @@ export const theme = (() => {
         }
 
         document.getElementById('button-theme').style.display = 'block';
+    };
+
+    const spyTop = () => {
+        const observerTop = new IntersectionObserver((es) => {
+            es.forEach((e) => {
+                if (e.isIntersecting) {
+                    if (['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))) {
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode() ? '#000000' : '#FFFFFF');
+                    } else {
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode() ? '#212529' : '#F8F9FA');
+                    }
+                }
+            });
+        }, {
+            rootMargin: '0% 0% -90% 0%',
+        });
+
+        document.querySelectorAll('section').forEach((el) => {
+            observerTop.observe(el);
+        });
     };
 
     const init = () => {
@@ -244,6 +270,7 @@ export const theme = (() => {
     return {
         change,
         init,
+        spyTop,
         isDarkMode,
         showButtonChangeTheme
     };

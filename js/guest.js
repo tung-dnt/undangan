@@ -71,21 +71,27 @@ export const guest = (() => {
     };
 
     const name = () => {
-        const name = (new URLSearchParams(window.location.search)).get('to');
-        const guest = document.getElementById('guest-name');
+        const raw = window.location.search.split('to=');
 
-        if (!name || !guest) {
-            guest?.remove();
-        } else {
-            const div = document.createElement('div');
-            div.classList.add('m-2');
-            div.innerHTML = `<p class="mt-0 mb-1 mx-0 p-0" style="font-size: 0.95rem;">${guest.getAttribute('data-message')}</p><h2 class="m-0 p-0">${util.escapeHtml(name)}</h2>`;
-            guest.appendChild(div);
-        }
+        if (raw.length > 1 && raw[1].length > 0) {
+            const name = decodeURIComponent(raw[1]);
 
-        const form = document.getElementById('form-name');
-        if (form) {
-            form.value = information.get('name') ?? name;
+            const form = document.getElementById('form-name');
+            const guest = document.getElementById('guest-name');
+
+            if (form) {
+                form.value = information.get('name') ?? name;
+            }
+
+            if (guest) {
+                const div = document.createElement('div');
+                div.classList.add('m-2');
+                div.innerHTML = `
+                <p class="mt-0 mb-1 mx-0 p-0" style="font-size: 0.95rem;">${guest.getAttribute('data-message')}</p>
+                <h2 class="m-0 p-0">${util.escapeHtml(name)}</h2>`;
+
+                guest.appendChild(div);
+            }
         }
 
         util.opacity('loading', 0.025);
@@ -105,6 +111,7 @@ export const guest = (() => {
         audio.play();
         audio.showButton();
 
+        theme.spyTop();
         theme.showButtonChangeTheme();
         setTimeout(animation, 1500);
     };

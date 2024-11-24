@@ -32,7 +32,7 @@
     <!-- Appearance -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Website Undangan Pernikahan Wahyu dan Riski Secara Online">
-    <meta name="theme-color" content="#111111">
+    <meta name="theme-color" content="#000000">
     <meta name="color-scheme" content="dark light">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="canonical" href="https://ulems.my.id/">
@@ -237,7 +237,7 @@
             <div class="container">
                 <h2 class="font-esthetic py-4 m-0" style="font-size: 2.5rem;">Moment Bahagia</h2>
 
-                <div class="border rounded-pill shadow py-2 px-4 mt-2 mb-4">
+                <div class="border rounded-pill shadow py-2 px-4 mt-2 mb-3">
                     <!-- Ganti waktunya pada data-waktu (sesuai format tersebut) -->
                     <div class="row justify-content-center" data-time="2024-01-01 00:00:00" id="count-down">
                         <div class="col-3 p-1">
@@ -417,12 +417,12 @@
 
                 <div class="mb-3">
                     <label for="form-name" class="form-label"><i class="fa-solid fa-person me-1"></i>Nama</label>
-                    <input type="text" class="form-control shadow-sm rounded-4" id="form-name" placeholder="Isikan Nama Anda">
+                    <input type="text" class="form-control shadow-sm rounded-4" id="form-name" offline-disabled placeholder="Isikan Nama Anda">
                 </div>
 
                 <div class="mb-3">
                     <label for="form-presence" class="form-label"><i class="fa-solid fa-person-circle-question me-1"></i>Presensi</label>
-                    <select class="form-select shadow-sm rounded-4" id="form-presence">
+                    <select class="form-select shadow-sm rounded-4" id="form-presence" offline-disabled>
                         <option value="0" selected>Konfirmasi Presensi</option>
                         <option value="1">Datang</option>
                         <option value="2">Berhalangan</option>
@@ -440,11 +440,11 @@
                     </div>
 
                     <label for="form-comment" class="form-label"><i class="fa-solid fa-comment me-1"></i>Ucapan &amp; Doa</label>
-                    <textarea class="form-control shadow-sm rounded-4" id="form-comment" rows="4" placeholder="Tulis Ucapan dan Doa"></textarea>
+                    <textarea class="form-control shadow-sm rounded-4" id="form-comment" rows="4" placeholder="Tulis Ucapan dan Doa" offline-disabled></textarea>
                 </div>
 
                 <div class="d-grid">
-                    <button class="btn btn-primary btn-sm rounded-4 shadow m-1" onclick="comment.send(this)">
+                    <button class="btn btn-primary btn-sm rounded-4 shadow m-1" onclick="comment.send(this)" offline-disabled>
                         <i class="fa-solid fa-paper-plane me-1"></i>Send
                     </button>
                 </div>
@@ -457,7 +457,7 @@
             <nav class="d-flex d-none justify-content-center mb-0" id="pagination">
                 <ul class="pagination mb-0">
                     <li class="page-item disabled" id="previous">
-                        <button class="page-link rounded-start-4" onclick="pagination.previous(this)">
+                        <button class="page-link rounded-start-4" onclick="pagination.previous(this)" offline-disabled>
                             <i class="fa-solid fa-circle-left me-1"></i>Prev
                         </button>
                     </li>
@@ -465,7 +465,7 @@
                         <span class="page-link text-light" id="page">1</span>
                     </li>
                     <li class="page-item" id="next">
-                        <button class="page-link rounded-end-4" onclick="pagination.next(this)">
+                        <button class="page-link rounded-end-4" onclick="pagination.next(this)" offline-disabled>
                             Next<i class="fa-solid fa-circle-right ms-1"></i>
                         </button>
                     </li>
@@ -523,7 +523,7 @@
     </button>
 
     <!-- Audio Button -->
-    <button type="button" id="button-music" style="display: none;" class="btn bg-dark border btn-sm rounded-circle btn-music position-fixed" onclick="audio.button()" data-url="./assets/music/sound.mp3">
+    <button type="button" id="button-music" style="display: none;" class="btn bg-dark border btn-sm rounded-circle btn-music position-fixed" onclick="audio.button()" data-url="./assets/music/sound.mp3" offline-disabled>
         <i class="fa-solid fa-circle-pause spin-button"></i>
     </button>
 
