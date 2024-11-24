@@ -38,12 +38,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if NETLIFY_BUILD_HOOK_URL is set
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Check if NETLIFY_AUTH_TOKEN is set
       run: |
-        if [ -z "${{ secrets.NETLIFY_BUILD_HOOK_URL }}" ]; then
-          echo "NETLIFY_BUILD_HOOK_URL is not set. Skipping deployment."
+        if [ -z "${{ secrets.NETLIFY_AUTH_TOKEN }}" ]; then
+          echo "NETLIFY_AUTH_TOKEN is not set. Skipping deployment."
           exit 0
         fi
 
-    - name: Netlify Build Hook
-      run: curl -X POST ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+    - name: Deploy to Netlify
+      run: |
+        npm install -g netlify-cli
+        netlify deploy --prod --auth=$NETLIFY_AUTH_TOKEN
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
