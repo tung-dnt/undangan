@@ -114,7 +114,12 @@ export const theme = (() => {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColors[now]);
+                        let color = now;
+                        if (now === '#000000' || now === '#212529') {
+                            color = themeColors[now];
+                        }
+
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
                     }
                 }
             });
@@ -139,7 +144,12 @@ export const theme = (() => {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColors[now]);
+                        let color = now;
+                        if (now === '#FFFFFF' || now === '#F8F9FA') {
+                            color = themeColors[now];
+                        }
+
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', color);
                     }
                 }
             });
@@ -181,14 +191,14 @@ export const theme = (() => {
             es.forEach((e) => {
                 if (e.isIntersecting) {
                     if (['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))) {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode() ? '#000000' : '#FFFFFF');
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode('#000000', '#FFFFFF'));
                     } else {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode() ? '#212529' : '#F8F9FA');
+                        document.querySelector('meta[name="theme-color"]').setAttribute('content', isDarkMode('#212529', '#F8F9FA'));
                     }
                 }
             });
         }, {
-            rootMargin: '0% 0% -90% 0%',
+            rootMargin: '0% 0% -95% 0%',
         });
 
         document.querySelectorAll('section').forEach((el) => {

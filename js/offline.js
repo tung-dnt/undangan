@@ -1,6 +1,8 @@
 export const offline = (() => {
 
     let alert = null;
+    let elements = null;
+    let online = null;
 
     const show = (isUp) => new Promise((res) => {
         let op = parseFloat(alert.style.opacity);
@@ -38,22 +40,25 @@ export const offline = (() => {
     });
 
     const setOffline = () => {
-        alert.firstElementChild.firstElementChild.classList.remove('bg-success');
-        alert.firstElementChild.firstElementChild.classList.add('bg-danger');
-        alert.firstElementChild.firstElementChild.firstElementChild.innerHTML = '<i class="fa-solid fa-ban me-1"></i>Koneksi tidak tersedia';
+        const el = alert.firstElementChild.firstElementChild;
+        el.classList.remove('bg-success');
+        el.classList.add('bg-danger');
+        el.firstElementChild.innerHTML = '<i class="fa-solid fa-ban me-1"></i>Koneksi tidak tersedia';
     };
 
     const setOnline = () => {
-        alert.firstElementChild.firstElementChild.classList.remove('bg-danger');
-        alert.firstElementChild.firstElementChild.classList.add('bg-success');
-        alert.firstElementChild.firstElementChild.firstElementChild.innerHTML = '<i class="fa-solid fa-cloud me-1"></i>Koneksi tersedia kembali';
+        const el = alert.firstElementChild.firstElementChild;
+        el.classList.remove('bg-danger');
+        el.classList.add('bg-success');
+        el.firstElementChild.innerHTML = '<i class="fa-solid fa-cloud me-1"></i>Koneksi tersedia kembali';
     };
 
     const onOffline = () => {
+        online = false;
         setOffline();
         show(true);
 
-        document.querySelectorAll('input[offline-disabled], button[offline-disabled], select[offline-disabled], textarea[offline-disabled]').forEach((e) => {
+        elements.forEach((e) => {
             if (e.tagName === 'BUTTON') {
                 e.classList.add('disabled');
             } else {
@@ -63,6 +68,7 @@ export const offline = (() => {
     };
 
     const onOnline = () => {
+        online = true;
         setOnline();
 
         let timeout = null;
@@ -73,7 +79,7 @@ export const offline = (() => {
             setOffline();
         }, 3000);
 
-        document.querySelectorAll('input[offline-disabled], button[offline-disabled], select[offline-disabled], textarea[offline-disabled]').forEach((e) => {
+        elements.forEach((e) => {
             if (e.tagName === 'BUTTON') {
                 e.classList.remove('disabled');
             } else {
@@ -82,13 +88,19 @@ export const offline = (() => {
         });
     };
 
+    const isOnline = () => {
+        return online;
+    };
+
     const init = () => {
         window.addEventListener('online', onOnline);
         window.addEventListener('offline', onOffline);
         alert = document.getElementById('offline-mode');
+        elements = document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]');
     };
 
     return {
-        init
+        init,
+        isOnline,
     };
 })();

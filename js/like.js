@@ -1,4 +1,5 @@
 import { dto } from './dto.js';
+import { offline } from './offline.js';
 import { storage } from './storage.js';
 import { session } from './session.js';
 import { confetti } from './confetti.js';
@@ -100,6 +101,10 @@ export const like = (() => {
     };
 
     const tapTap = async (div) => {
+        if (!offline.isOnline()) {
+            return;
+        }
+
         const currentTime = Date.now();
         const tapLength = currentTime - parseInt(div.getAttribute('data-tapTime'));
         const uuid = div.id.replace('body-content-', '');
