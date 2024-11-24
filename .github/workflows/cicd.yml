@@ -56,6 +56,8 @@ jobs:
     - name: Deploy to Netlify
       run: |
         npm install netlify-cli
-        netlify deploy --prod --auth=$NETLIFY_AUTH_TOKEN
+        netlify link --site ${{ secrets.NETLIFY_SITE_ID }}
+        netlify deploy --prod --dir=/ --auth=$NETLIFY_AUTH_TOKEN  --silent
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
