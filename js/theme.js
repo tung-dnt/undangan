@@ -5,14 +5,15 @@ export const theme = (() => {
     const THEME_DARK = 'dark';
     const THEME_LIGHT = 'light';
     const themeColors = {
-        '#000000': '#FFFFFF',
-        '#FFFFFF': '#000000',
-        '#212529': '#F8F9FA',
-        '#F8F9FA': '#212529'
+        '#000000': '#ffffff',
+        '#ffffff': '#000000',
+        '#212529': '#f8f9fa',
+        '#f8f9fa': '#212529'
     };
 
     let theme = null;
     let isAuto = false;
+    let metaTheme = null;
     let observerLight = null;
     let observerDark = null;
 
@@ -104,7 +105,7 @@ export const theme = (() => {
         theme.set('active', THEME_LIGHT);
         document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
 
-        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
+        const now = metaTheme.getAttribute('content');
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
 
         let countChange = 0;
@@ -114,7 +115,7 @@ export const theme = (() => {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
+                        metaTheme.setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
                     }
                 }
             };
@@ -132,7 +133,7 @@ export const theme = (() => {
         theme.set('active', THEME_DARK);
         document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
-        const now = document.querySelector('meta[name="theme-color"]').getAttribute('content');
+        const now = metaTheme.getAttribute('content');
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
 
         let countChange = 0;
@@ -142,7 +143,7 @@ export const theme = (() => {
                     countChange += 1;
 
                     if (elements.length === countChange) {
-                        document.querySelector('meta[name="theme-color"]').setAttribute('content', (now === '#FFFFFF' || now === '#F8F9FA') ? themeColors[now] : now);
+                        metaTheme.setAttribute('content', (now === '#ffffff' || now === '#f8f9fa') ? themeColors[now] : now);
                     }
                 }
             };
@@ -187,10 +188,10 @@ export const theme = (() => {
             es.forEach((e) => {
                 if (e.isIntersecting) {
                     const themeColor = ['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))
-                        ? isDarkMode('#000000', '#FFFFFF')
-                        : isDarkMode('#212529', '#F8F9FA');
+                        ? isDarkMode('#000000', '#ffffff')
+                        : isDarkMode('#212529', '#f8f9fa');
 
-                    document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
+                    metaTheme.setAttribute('content', themeColor);
                 }
             });
         }, {
@@ -204,6 +205,7 @@ export const theme = (() => {
 
     const init = () => {
         theme = storage('theme');
+        metaTheme = document.querySelector('meta[name="theme-color"]');
 
         observerLight = new IntersectionObserver((es, o) => {
             es.forEach((e) => {
@@ -238,10 +240,10 @@ export const theme = (() => {
         });
 
         if (!theme.has('active')) {
-            theme.set('active', THEME_LIGHT);
-
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 theme.set('active', THEME_DARK);
+            } else {
+                theme.set('active', THEME_LIGHT);
             }
         }
 

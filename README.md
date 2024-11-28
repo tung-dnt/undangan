@@ -9,7 +9,7 @@
 
 ## Demo
 
-[https://ulems.my.id?to=Teman+teman+semua](https://ulems.my.id?to=Teman+teman+semua)
+[https://ulems.my.id/?to=Teman%20teman%20semua](https://ulems.my.id/?to=Teman%20teman%20semua)
 
 
 ## Deployment API
