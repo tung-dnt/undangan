@@ -78,9 +78,9 @@ export const card = (() => {
         }
 
         if (session.isAdmin()) {
-            action += `<button style="font-size: 0.8rem;" onclick="comment.remove(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0" data-own="${comment.own}" offline-disabled>Delete</button>`;
+            action += `<button style="font-size: 0.8rem;" onclick="comment.remove(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0 me-1" data-own="${comment.own}" offline-disabled>Delete</button>`;
         } else if (owns.has(comment.uuid) && (config.get('can_delete') == true || config.get('can_delete') === undefined)) {
-            action += `<button style="font-size: 0.8rem;" onclick="comment.remove(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0" offline-disabled>Delete</button>`;
+            action += `<button style="font-size: 0.8rem;" onclick="comment.remove(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0 me-1" offline-disabled>Delete</button>`;
         }
 
         action += '</div>';
@@ -90,7 +90,7 @@ export const card = (() => {
 
     const renderReadMore = (uuid, comments) => {
         const hasId = showHide.get('show').includes(uuid);
-        return `<a class="text-light" style="font-size: 0.8rem;" onclick="comment.showOrHide(this)" data-uuid="${uuid}" data-uuids="${comments.join(',')}" data-show="${hasId ? 'true' : 'false'}" role="button" class="me-auto ms-1 py-0">${hasId ? 'Hide replies' : `Show replies (${comments.length})`}</a>`;
+        return `<a class="text-${theme.isDarkMode('light', 'dark')}" style="font-size: 0.8rem;" onclick="comment.showOrHide(this)" data-uuid="${uuid}" data-uuids="${comments.join(',')}" data-show="${hasId ? 'true' : 'false'}" role="button" class="me-auto ms-1 py-0">${hasId ? 'Hide replies' : `Show replies (${comments.length})`}</a>`;
     };
 
     const renderButton = (comment) => {

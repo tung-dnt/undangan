@@ -1,7 +1,6 @@
 export const offline = (() => {
 
     let alert = null;
-    let elements = null;
     let online = null;
 
     const show = (isUp) => new Promise((res) => {
@@ -58,12 +57,14 @@ export const offline = (() => {
         setOffline();
         show(true);
 
+        const elements = document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]');
         elements.forEach((e) => {
             if (e.tagName === 'BUTTON') {
                 e.classList.add('disabled');
             } else {
                 e.setAttribute('disabled', 'true');
             }
+            e.dispatchEvent(new Event('offline'));
         });
     };
 
@@ -79,12 +80,14 @@ export const offline = (() => {
             setOffline();
         }, 3000);
 
+        const elements = document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]');
         elements.forEach((e) => {
             if (e.tagName === 'BUTTON') {
                 e.classList.remove('disabled');
             } else {
                 e.removeAttribute('disabled');
             }
+            e.dispatchEvent(new Event('online'));
         });
     };
 
@@ -96,7 +99,6 @@ export const offline = (() => {
         window.addEventListener('online', onOnline);
         window.addEventListener('offline', onOffline);
         alert = document.getElementById('offline-mode');
-        elements = document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]');
     };
 
     return {

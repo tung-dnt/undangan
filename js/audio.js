@@ -14,7 +14,17 @@ export const audio = (() => {
         audio.loop = true;
         audio.volume = 1;
         audio.controls = false;
-        audio.preload = 'auto';
+
+        music.addEventListener('click', () => {
+            if (!isPlay) {
+                return play();
+            }
+
+            pause();
+        });
+
+        music.addEventListener('online', play);
+        music.addEventListener('offline', pause);
     };
 
     const play = async () => {
@@ -22,6 +32,7 @@ export const audio = (() => {
         try {
             await audio.play();
             isPlay = true;
+            music.innerHTML = '<i class="fa-solid fa-circle-pause spin-button"></i>';
         } catch (err) {
             isPlay = false;
             alert(err);
@@ -29,13 +40,7 @@ export const audio = (() => {
         music.disabled = false;
     };
 
-    const button = async () => {
-        if (!isPlay) {
-            await play();
-            music.innerHTML = '<i class="fa-solid fa-circle-pause spin-button"></i>';
-            return;
-        }
-
+    const pause = () => {
         isPlay = false;
         audio.pause();
         music.innerHTML = '<i class="fa-solid fa-circle-play"></i>';
@@ -48,7 +53,7 @@ export const audio = (() => {
     return {
         init,
         play,
-        button,
+        pause,
         showButton,
     };
 })();
