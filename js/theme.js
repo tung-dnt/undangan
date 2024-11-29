@@ -161,56 +161,60 @@ export const theme = (() => {
         theme = storage('theme');
         metaTheme = document.querySelector('meta[name="theme-color"]');
 
-        observerLight = new IntersectionObserver(async (es, o) => {
+        observerLight = new IntersectionObserver((es, o) => {
+            (async () => {
 
-            await Promise.all(es.filter((e) => e.isIntersecting).map((e) => new Promise((resolve) => {
-                const onTransitionEnd = () => {
-                    e.target.removeEventListener('transitionend', onTransitionEnd);
-                    resolve();
-                };
-                e.target.addEventListener('transitionend', onTransitionEnd);
-                toLight(e.target);
-            })));
+                await Promise.all(es.filter((e) => e.isIntersecting).map((e) => new Promise((resolve) => {
+                    const onTransitionEnd = () => {
+                        e.target.removeEventListener('transitionend', onTransitionEnd);
+                        resolve();
+                    };
+                    e.target.addEventListener('transitionend', onTransitionEnd);
+                    toLight(e.target);
+                })));
 
-            await Promise.all(es.filter((e) => !e.isIntersecting).map((e) => new Promise((resolve) => {
-                const onTransitionEnd = () => {
-                    e.target.removeEventListener('transitionend', onTransitionEnd);
-                    resolve();
-                };
-                e.target.addEventListener('transitionend', onTransitionEnd);
-                toLight(e.target);
-            })));
+                await Promise.all(es.filter((e) => !e.isIntersecting).map((e) => new Promise((resolve) => {
+                    const onTransitionEnd = () => {
+                        e.target.removeEventListener('transitionend', onTransitionEnd);
+                        resolve();
+                    };
+                    e.target.addEventListener('transitionend', onTransitionEnd);
+                    toLight(e.target);
+                })));
 
-            o.disconnect();
+                o.disconnect();
 
-            const now = metaTheme.getAttribute('content');
-            metaTheme.setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
+                const now = metaTheme.getAttribute('content');
+                metaTheme.setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
+            })();
         });
 
-        observerDark = new IntersectionObserver(async (es, o) => {
+        observerDark = new IntersectionObserver((es, o) => {
+            (async () => {
 
-            await Promise.all(es.filter((e) => e.isIntersecting).map((e) => new Promise((resolve) => {
-                const onTransitionEnd = () => {
-                    e.target.removeEventListener('transitionend', onTransitionEnd);
-                    resolve();
-                };
-                e.target.addEventListener('transitionend', onTransitionEnd);
-                toDark(e.target);
-            })));
+                await Promise.all(es.filter((e) => e.isIntersecting).map((e) => new Promise((resolve) => {
+                    const onTransitionEnd = () => {
+                        e.target.removeEventListener('transitionend', onTransitionEnd);
+                        resolve();
+                    };
+                    e.target.addEventListener('transitionend', onTransitionEnd);
+                    toDark(e.target);
+                })));
 
-            await Promise.all(es.filter((e) => !e.isIntersecting).map((e) => new Promise((resolve) => {
-                const onTransitionEnd = () => {
-                    e.target.removeEventListener('transitionend', onTransitionEnd);
-                    resolve();
-                };
-                e.target.addEventListener('transitionend', onTransitionEnd);
-                toDark(e.target);
-            })));
+                await Promise.all(es.filter((e) => !e.isIntersecting).map((e) => new Promise((resolve) => {
+                    const onTransitionEnd = () => {
+                        e.target.removeEventListener('transitionend', onTransitionEnd);
+                        resolve();
+                    };
+                    e.target.addEventListener('transitionend', onTransitionEnd);
+                    toDark(e.target);
+                })));
 
-            o.disconnect();
+                o.disconnect();
 
-            const now = metaTheme.getAttribute('content');
-            metaTheme.setAttribute('content', (now === '#ffffff' || now === '#f8f9fa') ? themeColors[now] : now);
+                const now = metaTheme.getAttribute('content');
+                metaTheme.setAttribute('content', (now === '#ffffff' || now === '#f8f9fa') ? themeColors[now] : now);
+            })();
         });
 
         if (!theme.has('active')) {
