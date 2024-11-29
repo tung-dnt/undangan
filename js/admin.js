@@ -1,5 +1,6 @@
 import { dto } from './dto.js';
 import { util } from './util.js';
+import { theme } from './theme.js';
 import { storage } from './storage.js';
 import { session } from './session.js';
 import { comment } from './comment.js';
@@ -248,6 +249,7 @@ export const admin = (() => {
     const init = () => {
         session.init();
         comment.init();
+        theme.spyTop();
 
         user = storage('user');
 

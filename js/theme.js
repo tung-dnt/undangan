@@ -172,7 +172,15 @@ export const theme = (() => {
                 toLight(e.target);
             })));
 
-            es.filter((e) => !e.isIntersecting).forEach((e) => toLight(e.target));
+            await Promise.all(es.filter((e) => !e.isIntersecting).map((e) => new Promise((resolve) => {
+                const onTransitionEnd = () => {
+                    e.target.removeEventListener('transitionend', onTransitionEnd);
+                    resolve();
+                };
+                e.target.addEventListener('transitionend', onTransitionEnd);
+                toLight(e.target);
+            })));
+
             o.disconnect();
 
             const now = metaTheme.getAttribute('content');
@@ -190,7 +198,15 @@ export const theme = (() => {
                 toDark(e.target);
             })));
 
-            es.filter((e) => !e.isIntersecting).forEach((e) => toDark(e.target));
+            await Promise.all(es.filter((e) => !e.isIntersecting).map((e) => new Promise((resolve) => {
+                const onTransitionEnd = () => {
+                    e.target.removeEventListener('transitionend', onTransitionEnd);
+                    resolve();
+                };
+                e.target.addEventListener('transitionend', onTransitionEnd);
+                toDark(e.target);
+            })));
+
             o.disconnect();
 
             const now = metaTheme.getAttribute('content');
