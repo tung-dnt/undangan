@@ -105,56 +105,16 @@ export const theme = (() => {
         theme.set('active', THEME_LIGHT);
         document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
 
-        const now = metaTheme.getAttribute('content');
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
-
-        let countChange = 0;
-        elements.forEach((el) => {
-            const callback = (e) => {
-                if (el.isEqualNode(e.target) && (e.propertyName === 'background-color' || e.propertyName === 'color')) {
-                    countChange += 1;
-
-                    if (elements.length === countChange) {
-                        metaTheme.setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
-                    }
-                }
-            };
-
-            el.removeEventListener('transitionend', callback);
-            el.addEventListener('transitionend', callback);
-        });
-
-        elements.forEach((el) => {
-            observerLight.observe(el);
-        });
+        elements.forEach(observerLight.observe);
     };
 
     const onDark = () => {
         theme.set('active', THEME_DARK);
         document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
-        const now = metaTheme.getAttribute('content');
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
-
-        let countChange = 0;
-        elements.forEach((el) => {
-            const callback = (e) => {
-                if (el.isEqualNode(e.target) && (e.propertyName === 'background-color' || e.propertyName === 'color')) {
-                    countChange += 1;
-
-                    if (elements.length === countChange) {
-                        metaTheme.setAttribute('content', (now === '#ffffff' || now === '#f8f9fa') ? themeColors[now] : now);
-                    }
-                }
-            };
-
-            el.removeEventListener('transitionend', callback);
-            el.addEventListener('transitionend', callback);
-        });
-
-        elements.forEach((el) => {
-            observerDark.observe(el);
-        });
+        elements.forEach(observerDark.observe);
     };
 
     const isDarkMode = (onDark = null, onLight = null) => {
@@ -176,11 +136,9 @@ export const theme = (() => {
     };
 
     const showButtonChangeTheme = () => {
-        if (!isAuto) {
-            return;
+        if (isAuto) {
+            document.getElementById('button-theme').style.display = 'block';
         }
-
-        document.getElementById('button-theme').style.display = 'block';
     };
 
     const spyTop = () => {
@@ -198,45 +156,47 @@ export const theme = (() => {
             rootMargin: '0% 0% -95% 0%',
         });
 
-        document.querySelectorAll('section').forEach((el) => {
-            observerTop.observe(el);
-        });
+        document.querySelectorAll('section').forEach(observerTop.observe);
     };
 
     const init = () => {
         theme = storage('theme');
         metaTheme = document.querySelector('meta[name="theme-color"]');
 
-        observerLight = new IntersectionObserver((es, o) => {
-            es.forEach((e) => {
-                if (e.isIntersecting) {
-                    toLight(e.target);
-                }
-            });
+        observerLight = new IntersectionObserver(async (es, o) => {
 
-            es.forEach((e) => {
-                if (!e.isIntersecting) {
-                    toLight(e.target);
-                }
-            });
+            await Promise.all(es.filter((e) => e.isIntersecting).map((e) => new Promise((resolve) => {
+                const onTransitionEnd = () => {
+                    e.target.removeEventListener('transitionend', onTransitionEnd);
+                    resolve();
+                };
+                e.target.addEventListener('transitionend', onTransitionEnd);
+                toLight(e.target);
+            })));
 
+            es.filter((e) => !e.isIntersecting).forEach((e) => toLight(e.target));
             o.disconnect();
+
+            const now = metaTheme.getAttribute('content');
+            metaTheme.setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
         });
 
-        observerDark = new IntersectionObserver((es, o) => {
-            es.forEach((e) => {
-                if (e.isIntersecting) {
-                    toDark(e.target);
-                }
-            });
+        observerDark = new IntersectionObserver(async (es, o) => {
 
-            es.forEach((e) => {
-                if (!e.isIntersecting) {
-                    toDark(e.target);
-                }
-            });
+            await Promise.all(es.filter((e) => e.isIntersecting).map((e) => new Promise((resolve) => {
+                const onTransitionEnd = () => {
+                    e.target.removeEventListener('transitionend', onTransitionEnd);
+                    resolve();
+                };
+                e.target.addEventListener('transitionend', onTransitionEnd);
+                toDark(e.target);
+            })));
 
+            es.filter((e) => !e.isIntersecting).forEach((e) => toDark(e.target));
             o.disconnect();
+
+            const now = metaTheme.getAttribute('content');
+            metaTheme.setAttribute('content', (now === '#ffffff' || now === '#f8f9fa') ? themeColors[now] : now);
         });
 
         if (!theme.has('active')) {
