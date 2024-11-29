@@ -106,7 +106,7 @@ export const theme = (() => {
         document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
 
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
-        elements.forEach(observerLight.observe);
+        elements.forEach((e) => observerLight.observe(e));
     };
 
     const onDark = () => {
@@ -114,7 +114,7 @@ export const theme = (() => {
         document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
-        elements.forEach(observerDark.observe);
+        elements.forEach((e) => observerDark.observe(e));
     };
 
     const isDarkMode = (onDark = null, onLight = null) => {
@@ -143,20 +143,18 @@ export const theme = (() => {
 
     const spyTop = () => {
         const observerTop = new IntersectionObserver((es) => {
-            es.forEach((e) => {
-                if (e.isIntersecting) {
-                    const themeColor = ['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))
-                        ? isDarkMode('#000000', '#ffffff')
-                        : isDarkMode('#212529', '#f8f9fa');
+            es.filter((e) => e.isIntersecting).forEach((e) => {
+                const themeColor = ['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))
+                    ? isDarkMode('#000000', '#ffffff')
+                    : isDarkMode('#212529', '#f8f9fa');
 
-                    metaTheme.setAttribute('content', themeColor);
-                }
+                metaTheme.setAttribute('content', themeColor);
             });
         }, {
             rootMargin: '0% 0% -95% 0%',
         });
 
-        document.querySelectorAll('section').forEach(observerTop.observe);
+        document.querySelectorAll('section').forEach((e) => observerTop.observe(e));
     };
 
     const init = () => {
