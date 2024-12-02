@@ -10,6 +10,8 @@ export const theme = (() => {
         '#212529': '#f8f9fa',
         '#f8f9fa': '#212529'
     };
+    const themeLight = ['#ffffff', '#f8f9fa'];
+    const themeDark = ['#000000', '#212529'];
 
     let theme = null;
     let isAuto = false;
@@ -103,7 +105,6 @@ export const theme = (() => {
 
     const onLight = () => {
         theme.set('active', THEME_LIGHT);
-        document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
 
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
         elements.forEach((e) => observerLight.observe(e));
@@ -111,7 +112,6 @@ export const theme = (() => {
 
     const onDark = () => {
         theme.set('active', THEME_DARK);
-        document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
         elements.forEach((e) => observerDark.observe(e));
@@ -145,8 +145,8 @@ export const theme = (() => {
         const observerTop = new IntersectionObserver((es) => {
             es.filter((e) => e.isIntersecting).forEach((e) => {
                 const themeColor = ['bg-black', 'bg-white'].some((i) => e.target.classList.contains(i))
-                    ? isDarkMode('#000000', '#ffffff')
-                    : isDarkMode('#212529', '#f8f9fa');
+                    ? isDarkMode(themeDark[0], themeLight[0])
+                    : isDarkMode(themeDark[1], themeLight[1]);
 
                 metaTheme.setAttribute('content', themeColor);
             });
@@ -168,8 +168,10 @@ export const theme = (() => {
 
             o.disconnect();
 
+            document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
+
             const now = metaTheme.getAttribute('content');
-            metaTheme.setAttribute('content', (now === '#000000' || now === '#212529') ? themeColors[now] : now);
+            metaTheme.setAttribute('content', themeDark.some((i) => i === now) ? themeColors[now] : now);
         });
 
         observerDark = new IntersectionObserver((es, o) => {
@@ -179,8 +181,10 @@ export const theme = (() => {
 
             o.disconnect();
 
+            document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
+
             const now = metaTheme.getAttribute('content');
-            metaTheme.setAttribute('content', (now === '#ffffff' || now === '#f8f9fa') ? themeColors[now] : now);
+            metaTheme.setAttribute('content', themeLight.some((i) => i === now) ? themeColors[now] : now);
         });
 
         if (!theme.has('active')) {
