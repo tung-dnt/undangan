@@ -111,7 +111,7 @@
                 <div class="tab-content">
 
                     <!-- Home -->
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" tabindex="0">
+                    <section class="tab-pane fade show active" id="pills-home" role="tabpanel" tabindex="0">
 
                         <!-- Sub Header -->
                         <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
@@ -123,238 +123,234 @@
                             </div>
                         </div>
 
-                        <section>
-                            <!-- Stats -->
-                            <div class="row">
-                                <div class="col col-xl-3 col-6 mb-3">
-                                    <div class="rounded-4 shadow p-3 border-0" style="background: #8D9EFF;">
-                                        <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                            <div class="col-9">
-                                                <p class="fw-bold m-0 p-0">Comments</p>
-                                                <h6 class="fw-bold m-0 p-0" id="count-comment">
-                                                    <div class="placeholder-wave">
-                                                        <span class="placeholder col-8 rounded-3"></span>
-                                                    </div>
-                                                </h6>
-                                            </div>
-                                            <div class="col-3 p-0">
-                                                <div class="d-md-none d-lg-none d-xl-none">
-                                                    <i class="fa-solid fa-comments me-2" style="font-size: 1.5em;"></i>
+                        <!-- Stats -->
+                        <div class="row">
+                            <div class="col col-xl-3 col-6 mb-3">
+                                <div class="rounded-4 shadow p-3 border-0" style="background: #8D9EFF;">
+                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
+                                        <div class="col-9">
+                                            <p class="fw-bold m-0 p-0">Comments</p>
+                                            <h6 class="fw-bold m-0 p-0" id="count-comment">
+                                                <div class="placeholder-wave">
+                                                    <span class="placeholder col-8 rounded-3"></span>
                                                 </div>
-                                                <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                    <i class="fa-solid fa-comments fa-2x me-2"></i>
-                                                </div>
-                                            </div>
+                                            </h6>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col col-xl-3 col-6 mb-3">
-                                    <div class="rounded-4 shadow p-3 border-0" style="background: #8D72E1;">
-                                        <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                            <div class="col-9">
-                                                <p class="fw-bold m-0 p-0">Present</p>
-                                                <h6 class="fw-bold m-0 p-0" id="count-present">
-                                                    <div class="placeholder-wave">
-                                                        <span class="placeholder col-8 rounded-3"></span>
-                                                    </div>
-                                                </h6>
+                                        <div class="col-3 p-0">
+                                            <div class="d-md-none d-lg-none d-xl-none">
+                                                <i class="fa-solid fa-comments me-2" style="font-size: 1.5em;"></i>
                                             </div>
-                                            <div class="col-3 p-0">
-                                                <div class="d-md-none d-lg-none d-xl-none">
-                                                    <i class="fa-solid fa-circle-check me-2" style="font-size: 1.5em;"></i>
-                                                </div>
-                                                <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                    <i class="fa-solid fa-circle-check fa-2x me-2"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-xl-3 col-6 mb-3">
-                                    <div class="rounded-4 shadow p-3 border-0" style="background: #7766CF;">
-                                        <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                            <div class="col-9">
-                                                <p class="fw-bold m-0 p-0">Absent</p>
-                                                <h6 class="fw-bold m-0 p-0" id="count-absent">
-                                                    <div class="placeholder-wave">
-                                                        <span class="placeholder col-8 rounded-3"></span>
-                                                    </div>
-                                                </h6>
-                                            </div>
-                                            <div class="col-3 p-0">
-                                                <div class="d-md-none d-lg-none d-xl-none">
-                                                    <i class="fa-solid fa-circle-xmark me-2" style="font-size: 1.5em;"></i>
-                                                </div>
-                                                <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                    <i class="fa-solid fa-circle-xmark fa-2x me-2"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col col-xl-3 col-6 mb-3">
-                                    <div class="rounded-4 shadow p-3 border-0" style="background: #6C4AB6;">
-                                        <div class="row align-items-center" style="color: var(--bs-gray-100);">
-                                            <div class="col-9">
-                                                <p class="fw-bold m-0 p-0">Likes</p>
-                                                <h6 class="fw-bold m-0 p-0" id="count-like">
-                                                    <div class="placeholder-wave">
-                                                        <span class="placeholder col-8 rounded-3"></span>
-                                                    </div>
-                                                </h6>
-                                            </div>
-                                            <div class="col-3 p-0">
-                                                <div class="d-md-none d-lg-none d-xl-none">
-                                                    <i class="fa-solid fa-heart me-2" style="font-size: 1.5em;"></i>
-                                                </div>
-                                                <div class="d-none d-md-block d-lg-block d-xl-block">
-                                                    <i class="fa-solid fa-heart fa-2x me-2"></i>
-                                                </div>
+                                            <div class="d-none d-md-block d-lg-block d-xl-block">
+                                                <i class="fa-solid fa-comments fa-2x me-2"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Form -->
-                            <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
-                                <label for="form-comment" class="form-label fw-bold"><i class="fa-solid fa-comment me-1"></i>Comment</label>
-                                <textarea class="form-control shadow-sm mb-3 rounded-4" id="form-comment" name="form-comment" placeholder="Type to comment" offline-disabled></textarea>
-
-                                <div class="d-flex justify-content-end mb-0">
-                                    <button onclick="comment.send(this)" class="btn btn-primary btn-sm rounded-4" style="font-size: 0.8rem;" offline-disabled><i class="fa-solid fa-paper-plane me-1"></i>Send</button>
+                            <div class="col col-xl-3 col-6 mb-3">
+                                <div class="rounded-4 shadow p-3 border-0" style="background: #8D72E1;">
+                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
+                                        <div class="col-9">
+                                            <p class="fw-bold m-0 p-0">Present</p>
+                                            <h6 class="fw-bold m-0 p-0" id="count-present">
+                                                <div class="placeholder-wave">
+                                                    <span class="placeholder col-8 rounded-3"></span>
+                                                </div>
+                                            </h6>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <div class="d-md-none d-lg-none d-xl-none">
+                                                <i class="fa-solid fa-circle-check me-2" style="font-size: 1.5em;"></i>
+                                            </div>
+                                            <div class="d-none d-md-block d-lg-block d-xl-block">
+                                                <i class="fa-solid fa-circle-check fa-2x me-2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="col col-xl-3 col-6 mb-3">
+                                <div class="rounded-4 shadow p-3 border-0" style="background: #7766CF;">
+                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
+                                        <div class="col-9">
+                                            <p class="fw-bold m-0 p-0">Absent</p>
+                                            <h6 class="fw-bold m-0 p-0" id="count-absent">
+                                                <div class="placeholder-wave">
+                                                    <span class="placeholder col-8 rounded-3"></span>
+                                                </div>
+                                            </h6>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <div class="d-md-none d-lg-none d-xl-none">
+                                                <i class="fa-solid fa-circle-xmark me-2" style="font-size: 1.5em;"></i>
+                                            </div>
+                                            <div class="d-none d-md-block d-lg-block d-xl-block">
+                                                <i class="fa-solid fa-circle-xmark fa-2x me-2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col col-xl-3 col-6 mb-3">
+                                <div class="rounded-4 shadow p-3 border-0" style="background: #6C4AB6;">
+                                    <div class="row align-items-center" style="color: var(--bs-gray-100);">
+                                        <div class="col-9">
+                                            <p class="fw-bold m-0 p-0">Likes</p>
+                                            <h6 class="fw-bold m-0 p-0" id="count-like">
+                                                <div class="placeholder-wave">
+                                                    <span class="placeholder col-8 rounded-3"></span>
+                                                </div>
+                                            </h6>
+                                        </div>
+                                        <div class="col-3 p-0">
+                                            <div class="d-md-none d-lg-none d-xl-none">
+                                                <i class="fa-solid fa-heart me-2" style="font-size: 1.5em;"></i>
+                                            </div>
+                                            <div class="d-none d-md-block d-lg-block d-xl-block">
+                                                <i class="fa-solid fa-heart fa-2x me-2"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            <!-- Comments -->
-                            <div class="my-2 pt-3" id="comments" data-loading="false"></div>
+                        <!-- Form -->
+                        <div class="bg-theme-light p-3 mt-2 rounded-4 shadow">
+                            <label for="form-comment" class="form-label fw-bold"><i class="fa-solid fa-comment me-1"></i>Comment</label>
+                            <textarea class="form-control shadow-sm mb-3 rounded-4" id="form-comment" name="form-comment" placeholder="Type to comment" offline-disabled></textarea>
 
-                            <!-- Pagination -->
-                            <nav class="d-flex d-none justify-content-center py-3 mb-4" id="pagination">
-                                <ul class="pagination mb-0">
-                                    <li class="page-item disabled" id="previous">
-                                        <button class="page-link rounded-start-4" onclick="pagination.previous(this)" offline-disabled>
-                                            <i class="fa-solid fa-circle-left me-1"></i>Prev
-                                        </button>
-                                    </li>
-                                    <li class="page-item disabled">
-                                        <span class="page-link text-dark" id="page">1</span>
-                                    </li>
-                                    <li class="page-item" id="next">
-                                        <button class="page-link rounded-end-4" onclick="pagination.next(this)" offline-disabled>
-                                            Next<i class="fa-solid fa-circle-right ms-1"></i>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </section>
-                    </div>
+                            <div class="d-flex justify-content-end mb-0">
+                                <button onclick="comment.send(this)" class="btn btn-primary btn-sm rounded-4" style="font-size: 0.8rem;" offline-disabled><i class="fa-solid fa-paper-plane me-1"></i>Send</button>
+                            </div>
+                        </div>
+
+                        <!-- Comments -->
+                        <div class="my-2 pt-3" id="comments" data-loading="false"></div>
+
+                        <!-- Pagination -->
+                        <nav class="d-flex d-none justify-content-center py-3 mb-4" id="pagination">
+                            <ul class="pagination mb-0">
+                                <li class="page-item disabled" id="previous">
+                                    <button class="page-link rounded-start-4" onclick="pagination.previous(this)" offline-disabled>
+                                        <i class="fa-solid fa-circle-left me-1"></i>Prev
+                                    </button>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link text-dark" id="page">1</span>
+                                </li>
+                                <li class="page-item" id="next">
+                                    <button class="page-link rounded-end-4" onclick="pagination.next(this)" offline-disabled>
+                                        Next<i class="fa-solid fa-circle-right ms-1"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </section>
 
                     <!-- Setting -->
-                    <div class="tab-pane fade" id="pills-setting" role="tabpanel" tabindex="0">
+                    <section class="tab-pane fade" id="pills-setting" role="tabpanel" tabindex="0">
 
                         <!-- Sub Header -->
                         <div class="rounded-4 p-2 mb-4 shadow" style="background-color: var(--bs-gray-200)">
                             <p class="fw-semibold m-1" style="color: var(--bs-gray-900);"><i class="fa-solid fa-gear mx-2"></i>Setting</p>
                         </div>
 
-                        <section>
-                            <!-- Email -->
+                        <!-- Email -->
+                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
+                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-envelope me-1"></i>Email</p>
+                            <p class="m-0 p-0" id="dashboard-email"></p>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
+                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-person me-1"></i>Name</p>
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control form-control-sm rounded-4" id="form-name" name="form-name" oninput="admin.enableButtonName()" offline-disabled>
+                                </div>
+                            </form>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-primary rounded-4" id="button-change-name" onclick="admin.changeName(this)" disabled offline-disabled>Change</button>
+                            </div>
+                        </div>
+
+                        <!-- Access Key -->
+                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
+                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-key me-1"></i>Access Key</p>
+
+                            <div class="input-group input-group-sm rounded-4 mb-3">
+                                <input type="text" class="form-control form-control-sm rounded-start-4" id="dashboard-accesskey" readonly>
+                                <button class="btn btn-sm btn-outline-secondary rounded-end-4" type="button" data-copy="" onclick="util.copy(this)" id="button-copy-accesskey" offline-disabled><i class="fa-solid fa-copy"></i></button>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-primary rounded-4" onclick="admin.regenerate(this)" offline-disabled>Regenerate</button>
+                            </div>
+                        </div>
+
+                        <!-- Toggle -->
+                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
+                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-sliders me-1"></i>Control</p>
+
+                            <div class="form-check form-switch mb-1">
+                                <input class="form-check-input" type="checkbox" role="button" id="darkMode" onchange="theme.change(this)">
+                                <label class="form-check-label" for="darkMode">Dark Mode</label>
+                            </div>
+                            <div class="form-check form-switch mb-1">
+                                <input class="form-check-input" type="checkbox" role="button" id="filterBadWord" onchange="admin.changeFilterBadWord(this)" offline-disabled>
+                                <label class="form-check-label" for="filterBadWord">Filter Bad Word</label>
+                            </div>
+                            <div class="form-check form-switch mb-1">
+                                <input class="form-check-input" type="checkbox" role="button" id="replyComment" onchange="admin.replyComment(this)" offline-disabled>
+                                <label class="form-check-label" for="replyComment">Can Reply Comment</label>
+                            </div>
+                            <div class="form-check form-switch mb-1">
+                                <input class="form-check-input" type="checkbox" role="button" id="editComment" onchange="admin.editComment(this)" offline-disabled>
+                                <label class="form-check-label" for="editComment">Can Edit Comment</label>
+                            </div>
+                            <div class="form-check form-switch mb-1">
+                                <input class="form-check-input" type="checkbox" role="button" id="deleteComment" onchange="admin.deleteComment(this)" offline-disabled>
+                                <label class="form-check-label" for="deleteComment">Can Delete Comment</label>
+                            </div>
+                        </div>
+
+                        <!-- Change Password -->
+                        <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
+                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-lock me-1"></i>Change Password</p>
+                            <form>
+                                <input hidden type="text" name="username" autocomplete="username" value="...">
+                                <div class="my-2">
+                                    <input type="password" class="form-control form-control-sm rounded-4" id="old_password" name="old_password" placeholder="Old Password" autocomplete="current-password" offline-disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control form-control-sm rounded-4" id="new_password" name="new_password" oninput="admin.enableButtonPassword()" placeholder="New Password" autocomplete="new-password" offline-disabled>
+                                </div>
+                            </form>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-sm btn-primary rounded-4" id="button-change-password" onclick="admin.changePassword(this)" disabled offline-disabled>Change</button>
+                            </div>
+                        </div>
+
+                        <!-- Logout -->
+                        <div class="d-md-none d-lg-none d-xl-none">
                             <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-envelope me-1"></i>Email</p>
-                                <p class="m-0 p-0" id="dashboard-email"></p>
+                                <button type="button" class="btn btn-danger btn-sm w-100 text-center fw-semibold rounded-4" onclick="admin.logout()" offline-disabled>
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+                                </button>
                             </div>
+                        </div>
 
-                            <!-- Name -->
-                            <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-person me-1"></i>Name</p>
-                                <form>
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control form-control-sm rounded-4" id="form-name" name="form-name" oninput="admin.enableButtonName()" offline-disabled>
-                                    </div>
-                                </form>
+                        <div class="p-3 bg-theme-light mb-4 rounded-4 shadow">
+                            <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-heart me-1"></i>Project</p>
+                            <p class="m-0 p-0">
+                                If you want to support me, consider <a target="_blank" href="https://saweria.co/dewanakl">buying me a coffee</a><i class="fa-solid fa-mug-hot ms-1"></i>
+                            </p>
+                        </div>
 
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-sm btn-primary rounded-4" id="button-change-name" onclick="admin.changeName(this)" disabled offline-disabled>Change</button>
-                                </div>
-                            </div>
-
-                            <!-- Access Key -->
-                            <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-key me-1"></i>Access Key</p>
-
-                                <div class="input-group input-group-sm rounded-4 mb-3">
-                                    <input type="text" class="form-control form-control-sm rounded-start-4" id="dashboard-accesskey" readonly>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-end-4" type="button" data-copy="" onclick="util.copy(this)" id="button-copy-accesskey" offline-disabled><i class="fa-solid fa-copy"></i></button>
-                                </div>
-
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-sm btn-primary rounded-4" onclick="admin.regenerate(this)" offline-disabled>Regenerate</button>
-                                </div>
-                            </div>
-
-                            <!-- Toggle -->
-                            <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-sliders me-1"></i>Control</p>
-
-                                <div class="form-check form-switch mb-1">
-                                    <input class="form-check-input" type="checkbox" role="button" id="darkMode" onchange="theme.change(this)">
-                                    <label class="form-check-label" for="darkMode">Dark Mode</label>
-                                </div>
-                                <div class="form-check form-switch mb-1">
-                                    <input class="form-check-input" type="checkbox" role="button" id="filterBadWord" onchange="admin.changeFilterBadWord(this)" offline-disabled>
-                                    <label class="form-check-label" for="filterBadWord">Filter Bad Word</label>
-                                </div>
-                                <div class="form-check form-switch mb-1">
-                                    <input class="form-check-input" type="checkbox" role="button" id="replyComment" onchange="admin.replyComment(this)" offline-disabled>
-                                    <label class="form-check-label" for="replyComment">Can Reply Comment</label>
-                                </div>
-                                <div class="form-check form-switch mb-1">
-                                    <input class="form-check-input" type="checkbox" role="button" id="editComment" onchange="admin.editComment(this)" offline-disabled>
-                                    <label class="form-check-label" for="editComment">Can Edit Comment</label>
-                                </div>
-                                <div class="form-check form-switch mb-1">
-                                    <input class="form-check-input" type="checkbox" role="button" id="deleteComment" onchange="admin.deleteComment(this)" offline-disabled>
-                                    <label class="form-check-label" for="deleteComment">Can Delete Comment</label>
-                                </div>
-                            </div>
-
-                            <!-- Change Password -->
-                            <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-lock me-1"></i>Change Password</p>
-                                <form>
-                                    <input hidden type="text" name="username" autocomplete="username" value="...">
-                                    <div class="my-2">
-                                        <input type="password" class="form-control form-control-sm rounded-4" id="old_password" name="old_password" placeholder="Old Password" autocomplete="current-password" offline-disabled>
-                                    </div>
-                                    <div class="mb-3">
-                                        <input type="password" class="form-control form-control-sm rounded-4" id="new_password" name="new_password" oninput="admin.enableButtonPassword()" placeholder="New Password" autocomplete="new-password" offline-disabled>
-                                    </div>
-                                </form>
-
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-sm btn-primary rounded-4" id="button-change-password" onclick="admin.changePassword(this)" disabled offline-disabled>Change</button>
-                                </div>
-                            </div>
-
-                            <!-- Logout -->
-                            <div class="d-md-none d-lg-none d-xl-none">
-                                <div class="p-3 bg-theme-light mb-3 rounded-4 shadow">
-                                    <button type="button" class="btn btn-danger btn-sm w-100 text-center fw-semibold rounded-4" onclick="admin.logout()" offline-disabled>
-                                        <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="p-3 bg-theme-light mb-4 rounded-4 shadow">
-                                <p class="mx-0 mt-0 mb-1 p-0 fw-bold"><i class="fa-solid fa-heart me-1"></i>Project</p>
-                                <p class="m-0 p-0">
-                                    If you want to support me, consider <a target="_blank" href="https://saweria.co/dewanakl">buying me a coffee</a><i class="fa-solid fa-mug-hot ms-1"></i>
-                                </p>
-                            </div>
-
-                        </section>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>

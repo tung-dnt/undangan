@@ -373,10 +373,12 @@ export const comment = (() => {
                     return res;
                 }
 
-                const observer = new MutationObserver((mutationsList) => {
+                const observer = new MutationObserver((mutationsList, o) => {
                     for (const mutation of mutationsList) {
                         if (mutation.type === 'childList' && session.isAdmin()) {
                             res.data.forEach(fetchTracker);
+                            o.disconnect();
+                            break;
                         }
                     }
                 });
