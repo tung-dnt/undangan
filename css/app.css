@@ -48,6 +48,7 @@
 
 .color-theme-white {
     color: rgb(255, 255, 255);
+    background-color: var(--bs-light);
 }
 
 .color-theme-black {
