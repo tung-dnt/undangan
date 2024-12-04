@@ -231,13 +231,13 @@ export const admin = (() => {
             return;
         }
 
+        user.clear();
         session.logout();
         bootstrap.Modal.getOrCreateInstance('#loginModal').show();
     };
 
     const init = () => {
         session.init();
-        comment.init();
         theme.spyTop();
 
         user = storage('user');
@@ -256,6 +256,7 @@ export const admin = (() => {
             return;
         }
 
+        comment.init();
         getUserDetail();
         getStatUser();
         comment.comment();
