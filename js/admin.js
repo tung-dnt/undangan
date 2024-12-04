@@ -237,11 +237,6 @@ export const admin = (() => {
     };
 
     const init = () => {
-        session.init();
-        theme.spyTop();
-
-        user = storage('user');
-
         if (!session.isAdmin()) {
             storage('owns').clear();
             storage('likes').clear();
@@ -251,12 +246,17 @@ export const admin = (() => {
             storage('information').clear();
         }
 
+        session.init();
+        theme.spyTop();
+        comment.init();
+
+        user = storage('user');
+
         if (!session.isAdmin() || !session.getToken() || (JSON.parse(atob((session.getToken() ?? '.').split('.')[1])).exp ?? 0) < (Date.now() / 1000)) {
             bootstrap.Modal.getOrCreateInstance('#loginModal').show();
             return;
         }
 
-        comment.init();
         getUserDetail();
         getStatUser();
         comment.comment();
