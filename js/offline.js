@@ -1,9 +1,9 @@
 export const offline = (() => {
 
     let alert = null;
-    let online = null;
+    let online = true;
 
-    const show = (isUp) => new Promise((res) => {
+    const show = (isUp = true) => new Promise((res) => {
         let op = parseFloat(alert.style.opacity);
         let clear = null;
 
@@ -38,6 +38,16 @@ export const offline = (() => {
         clear = setInterval(callback, 10);
     });
 
+    const hide = () => {
+        let t = null;
+        t = setTimeout(() => {
+            clearTimeout(t);
+            t = null;
+
+            setDefaultState();
+        }, 3000);
+    };
+
     const setOffline = () => {
         const el = alert.firstElementChild.firstElementChild;
         el.classList.remove('bg-success');
@@ -52,43 +62,38 @@ export const offline = (() => {
         el.firstElementChild.innerHTML = '<i class="fa-solid fa-cloud me-1"></i>Koneksi tersedia kembali';
     };
 
+    const setDefaultState = async () => {
+        await show(false);
+        setOffline();
+    };
+
+    const changeState = () => {
+        document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]').forEach((e) => {
+            e.dispatchEvent(new Event(isOnline() ? 'online' : 'offline'));
+
+            if (e.tagName === 'BUTTON') {
+                isOnline() ? e.classList.remove('disabled') : e.classList.add('disabled');
+                return;
+            }
+
+            isOnline() ? e.removeAttribute('disabled') : e.setAttribute('disabled', 'true');
+        });
+    };
+
     const onOffline = () => {
         online = false;
-        setOffline();
-        show(true);
 
-        const elements = document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]');
-        elements.forEach((e) => {
-            if (e.tagName === 'BUTTON') {
-                e.classList.add('disabled');
-            } else {
-                e.setAttribute('disabled', 'true');
-            }
-            e.dispatchEvent(new Event('offline'));
-        });
+        setOffline();
+        show();
+        changeState();
     };
 
     const onOnline = () => {
         online = true;
+
         setOnline();
-
-        let timeout = null;
-        timeout = setTimeout(async () => {
-            clearTimeout(timeout);
-            timeout = null;
-            await show(false);
-            setOffline();
-        }, 3000);
-
-        const elements = document.querySelectorAll('button[offline-disabled], input[offline-disabled], select[offline-disabled], textarea[offline-disabled]');
-        elements.forEach((e) => {
-            if (e.tagName === 'BUTTON') {
-                e.classList.remove('disabled');
-            } else {
-                e.removeAttribute('disabled');
-            }
-            e.dispatchEvent(new Event('online'));
-        });
+        hide();
+        changeState();
     };
 
     const isOnline = () => {

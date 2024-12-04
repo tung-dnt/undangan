@@ -67,7 +67,7 @@ export const card = (() => {
     const renderAction = (comment) => {
         const btn = theme.isDarkMode('light', 'dark');
 
-        let action = '<div class="d-flex flex-wrap justify-content-start align-items-center">';
+        let action = `<div class="d-flex flex-wrap justify-content-start align-items-center" data-button-action="${comment.uuid}">`;
 
         if (config.get('can_reply') == true || config.get('can_reply') === undefined) {
             action += `<button style="font-size: 0.8rem;" onclick="comment.reply(this)" data-uuid="${comment.uuid}" class="btn btn-sm btn-outline-${btn} rounded-4 py-0 me-1" offline-disabled>Reply</button>`;

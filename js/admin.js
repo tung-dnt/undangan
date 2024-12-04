@@ -1,6 +1,7 @@
 import { dto } from './dto.js';
 import { util } from './util.js';
 import { theme } from './theme.js';
+import { navbar } from './navbar.js';
 import { storage } from './storage.js';
 import { session } from './session.js';
 import { comment } from './comment.js';
@@ -33,10 +34,10 @@ export const admin = (() => {
 
     const getStatUser = () => {
         request(HTTP_GET, '/api/stats').token(session.getToken()).send().then((res) => {
-            document.getElementById('count-comment').innerHTML = res.data.comments.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('count-like').innerHTML = res.data.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('count-present').innerHTML = res.data.present.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            document.getElementById('count-absent').innerHTML = res.data.absent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            document.getElementById('count-comment').innerHTML = res.data.comments.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            document.getElementById('count-like').innerHTML = res.data.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            document.getElementById('count-present').innerHTML = res.data.present.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            document.getElementById('count-absent').innerHTML = res.data.absent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         });
     };
 
@@ -202,18 +203,6 @@ export const admin = (() => {
         }
     };
 
-    const buttonNavHome = (btn) => {
-        bootstrap.Tab.getOrCreateInstance(document.getElementById('button-home')).show();
-        btn.classList.add('active');
-        document.getElementById('button-mobile-setting').classList.remove('active');
-    };
-
-    const buttonNavSetting = (btn) => {
-        bootstrap.Tab.getOrCreateInstance(document.getElementById('button-setting')).show();
-        btn.classList.add('active');
-        document.getElementById('button-mobile-home').classList.remove('active');
-    };
-
     const login = async (button) => {
         const btn = util.disableButton(button);
         const formEmail = document.getElementById('loginEmail');
@@ -288,7 +277,6 @@ export const admin = (() => {
         changeName,
         enableButtonName,
         enableButtonPassword,
-        buttonNavHome,
-        buttonNavSetting
+        navbar,
     };
 })();

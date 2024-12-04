@@ -16,14 +16,7 @@ export const comment = (() => {
     let showHide = null;
 
     const changeButton = (id, disabled) => {
-        const buttonMethod = ['reply', 'edit', 'remove'];
-
-        buttonMethod.forEach((v) => {
-            const status = document.querySelector(`[onclick="comment.${v}(this)"][data-uuid="${id}"]`);
-            if (status) {
-                status.disabled = disabled;
-            }
-        });
+        document.querySelector(`[data-button-action="${id}"]`).childNodes.forEach((e) => e.disabled = disabled);
     };
 
     const remove = async (button) => {
@@ -58,12 +51,7 @@ export const comment = (() => {
 
             if (oldUuids.find((i) => i === id)) {
                 const uuids = oldUuids.filter((i) => i !== id).join(',');
-
-                if (uuids.length === 0) {
-                    n.remove();
-                } else {
-                    n.setAttribute('data-uuids', uuids);
-                }
+                uuids.length === 0 ? n.remove() : n.setAttribute('data-uuids', uuids);
             }
         });
 
@@ -332,14 +320,6 @@ export const comment = (() => {
         const comments = document.getElementById('comments');
         const onNullComment = `<div class="h6 text-center fw-bold p-4 my-3 bg-theme-${theme.isDarkMode('dark', 'light')} rounded-4 shadow">Yuk bagikan undangan ini biar banyak komentarnya</div>`;
 
-        if (!showHide.has('hidden')) {
-            showHide.set('hidden', []);
-        }
-
-        if (!showHide.has('show')) {
-            showHide.set('show', []);
-        }
-
         return request(HTTP_GET, `/api/comment?per=${pagination.getPer()}&next=${pagination.getNext()}`)
             .token(session.getToken())
             .send()
@@ -400,7 +380,7 @@ export const comment = (() => {
             button.innerText = 'Show replies';
             button.innerText += ' (' + ids.length + ')';
 
-            showHide.set('show', showHide.get('show').filter((item) => item !== uuid));
+            showHide.set('show', showHide.get('show').filter((i) => i !== uuid));
         } else {
             button.setAttribute('data-show', 'true');
             button.innerText = 'Hide replies';
@@ -409,19 +389,16 @@ export const comment = (() => {
         }
 
         for (const id of ids) {
-            showHide.set('hidden', showHide.get('hidden').map((item) => {
-                if (item.uuid === id) {
-                    item.show = !show;
+            showHide.set('hidden', showHide.get('hidden').map((i) => {
+                if (i.uuid === id) {
+                    i.show = !show;
                 }
 
-                return item;
+                return i;
             }));
 
-            if (!show) {
-                document.getElementById(id).classList.remove('d-none');
-            } else {
-                document.getElementById(id).classList.add('d-none');
-            }
+            const cls = document.getElementById(id).classList;
+            show ? cls.add('d-none') : cls.remove('d-none');
         }
     };
 
@@ -461,6 +438,14 @@ export const comment = (() => {
         user = storage('user');
         tracker = storage('tracker');
         showHide = storage('comment');
+
+        if (!showHide.has('hidden')) {
+            showHide.set('hidden', []);
+        }
+
+        if (!showHide.has('show')) {
+            showHide.set('show', []);
+        }
     };
 
     return {
