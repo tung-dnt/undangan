@@ -105,6 +105,7 @@ export const theme = (() => {
 
     const onLight = () => {
         theme.set('active', THEME_LIGHT);
+        document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
 
         const elements = document.querySelectorAll('.text-light, .btn-theme-light, .bg-dark, .bg-black, .bg-theme-dark, .color-theme-black, .btn-outline-light, .bg-cover-black');
         elements.forEach((e) => observerLight.observe(e));
@@ -112,6 +113,7 @@ export const theme = (() => {
 
     const onDark = () => {
         theme.set('active', THEME_DARK);
+        document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
         const elements = document.querySelectorAll('.text-dark, .btn-theme-dark, .bg-light, .bg-white, .bg-theme-light, .color-theme-white, .btn-outline-dark, .bg-cover-white');
         elements.forEach((e) => observerDark.observe(e));
@@ -168,8 +170,6 @@ export const theme = (() => {
 
             o.disconnect();
 
-            document.documentElement.setAttribute('data-bs-theme', THEME_LIGHT);
-
             const now = metaTheme.getAttribute('content');
             metaTheme.setAttribute('content', themeDark.some((i) => i === now) ? themeColors[now] : now);
         });
@@ -180,8 +180,6 @@ export const theme = (() => {
             es.filter((e) => !e.isIntersecting).forEach((e) => toDark(e.target));
 
             o.disconnect();
-
-            document.documentElement.setAttribute('data-bs-theme', THEME_DARK);
 
             const now = metaTheme.getAttribute('content');
             metaTheme.setAttribute('content', themeLight.some((i) => i === now) ? themeColors[now] : now);
