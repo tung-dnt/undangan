@@ -118,8 +118,6 @@ export const guest = (() => {
 
     const init = () => {
         session.init();
-        comment.init();
-
         countDownDate();
         information = storage('information');
 
@@ -142,22 +140,12 @@ export const guest = (() => {
         }
 
         if ((document.body.getAttribute('data-key') ?? '').length === 0) {
-            const comment = document.getElementById('comment');
-            if (comment) {
-                comment.remove();
-            }
-
-            const nav = document.querySelector('a.nav-link[href="#comment"]');
-            if (nav) {
-                const item = nav.closest('li.nav-item');
-                if (item) {
-                    item.remove();
-                }
-            }
-
+            document.getElementById('comment')?.remove();
+            document.querySelector('a.nav-link[href="#comment"]')?.closest('li.nav-item')?.remove();
             return;
         }
 
+        comment.init();
         progress.add();
         session.guest()
             .then((res) => {
@@ -165,7 +153,7 @@ export const guest = (() => {
                     return;
                 }
 
-                comment.comment()
+                return comment.comment()
                     .then(() => progress.complete('comment'))
                     .catch(() => progress.invalid('comment'));
             });
