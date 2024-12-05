@@ -2,6 +2,7 @@ export const offline = (() => {
 
     let alert = null;
     let online = true;
+    let abort = [];
 
     const show = (isUp = true) => new Promise((res) => {
         let op = parseFloat(alert.style.opacity);
@@ -86,6 +87,7 @@ export const offline = (() => {
         setOffline();
         show();
         changeState();
+        abort.forEach((a) => a());
     };
 
     const onOnline = () => {
@@ -100,6 +102,10 @@ export const offline = (() => {
         return online;
     };
 
+    const addAbort = (callback) => {
+        abort.push(callback);
+    };
+
     const init = () => {
         window.addEventListener('online', onOnline);
         window.addEventListener('offline', onOffline);
@@ -109,5 +115,6 @@ export const offline = (() => {
     return {
         init,
         isOnline,
+        addAbort,
     };
 })();

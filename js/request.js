@@ -1,4 +1,5 @@
 import { dto } from './dto.js';
+import { offline } from './offline.js';
 import { session } from './session.js';
 
 export const HTTP_GET = 'GET';
@@ -9,13 +10,17 @@ export const HTTP_DELETE = 'DELETE';
 
 export const request = (method, path) => {
 
+    const controller = new AbortController();
+    offline.addAbort(() => controller.abort());
+
     let url = document.body.getAttribute('data-url');
     let req = {
         method: method,
         headers: new Headers({
             'Accept': 'application/json',
             'Content-Type': 'application/json'
-        })
+        }),
+        signal: controller.signal,
     };
 
     if (url.slice(-1) === '/') {
@@ -88,7 +93,6 @@ export const request = (method, path) => {
 
                     document.body.removeChild(link);
                     window.URL.revokeObjectURL(href);
-
                 })
                 .catch((err) => {
                     alert(err);
