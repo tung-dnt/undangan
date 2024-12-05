@@ -15,16 +15,9 @@ export const audio = (() => {
         audio.volume = 1;
         audio.controls = false;
 
-        music.addEventListener('click', () => {
-            if (!isPlay) {
-                return play();
-            }
-
-            pause();
-        });
-
         music.addEventListener('online', play);
         music.addEventListener('offline', pause);
+        music.addEventListener('click', () => isPlay ? pause() : play());
     };
 
     const play = async () => {
