@@ -53,6 +53,7 @@
 
 .color-theme-black {
     color: rgb(0, 0, 0);
+    background-color: var(--bs-dark);
 }
 
 section {
