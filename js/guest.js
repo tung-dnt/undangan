@@ -72,17 +72,12 @@ export const guest = (() => {
 
     const name = () => {
         const raw = window.location.search.split('to=');
+        let name = null;
 
         if (raw.length > 1 && raw[1].length > 0) {
-            const name = decodeURIComponent(raw[1]);
+            name = decodeURIComponent(raw[1]);
 
-            const form = document.getElementById('form-name');
             const guest = document.getElementById('guest-name');
-
-            if (form) {
-                form.value = information.get('name') ?? name;
-            }
-
             if (guest) {
                 const div = document.createElement('div');
                 div.classList.add('m-2');
@@ -92,6 +87,11 @@ export const guest = (() => {
 
                 guest.appendChild(div);
             }
+        }
+
+        const form = document.getElementById('form-name');
+        if (form) {
+            form.value = information.get('name') ?? name;
         }
 
         util.opacity('loading', 0.025);
@@ -130,7 +130,7 @@ export const guest = (() => {
             storage('tracker').clear();
         }
 
-        if (information.get('presence')) {
+        if (information.get('presence') !== undefined) {
             document.getElementById('form-presence').value = information.get('presence') ? '1' : '2';
         }
 
@@ -139,7 +139,7 @@ export const guest = (() => {
             info.remove();
         }
 
-        if ((document.body.getAttribute('data-key') ?? '').length === 0) {
+        if (document.body.getAttribute('data-key')?.length === 0) {
             document.getElementById('comment')?.remove();
             document.querySelector('a.nav-link[href="#comment"]')?.closest('li.nav-item')?.remove();
             return;
