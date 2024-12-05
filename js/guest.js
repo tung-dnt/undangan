@@ -160,9 +160,15 @@ export const guest = (() => {
 
         progress.add();
         session.guest()
-            .then(() => comment.comment())
-            .then(() => progress.complete('comment'))
-            .catch(() => progress.invalid('comment'));
+            .then((res) => {
+                if (res.code !== 200) {
+                    return;
+                }
+
+                comment.comment()
+                    .then(() => progress.complete('comment'))
+                    .catch(() => progress.invalid('comment'));
+            });
     };
 
     return {

@@ -36,10 +36,10 @@ export const session = (() => {
         return request(HTTP_GET, '/api/config')
             .token(document.body.getAttribute('data-key'))
             .send()
-            .then(async (res) => {
+            .then((res) => {
                 if (res.code !== 200) {
                     progress.invalid('request');
-                    return;
+                    return res;
                 }
 
                 const config = storage('config');
@@ -49,6 +49,7 @@ export const session = (() => {
 
                 session.set('token', document.body.getAttribute('data-key'));
                 progress.complete('request');
+                return res;
             }).catch(() => {
                 progress.invalid('request');
             });
