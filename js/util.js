@@ -101,6 +101,18 @@ export const util = (() => {
         }, timeout);
     };
 
+    const base64Encode = (str) => {
+        const encoder = new TextEncoder();
+        const encodedBytes = encoder.encode(str);
+        return btoa(String.fromCharCode(...encodedBytes));
+    };
+
+    const base64Decode = (str) => {
+        const decoder = new TextDecoder();
+        const decodedBytes = Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+        return decoder.decode(decodedBytes);
+    };
+
     const close = () => {
         storage('information').set('info', true);
     };
@@ -113,6 +125,8 @@ export const util = (() => {
         opacity,
         animate,
         escapeHtml,
+        base64Encode,
+        base64Decode,
         disableButton,
         addLoadingCheckbox,
     };

@@ -15,9 +15,7 @@ export const comment = (() => {
     let tracker = null;
     let showHide = null;
 
-    const changeButton = (id, disabled) => {
-        document.querySelector(`[data-button-action="${id}"]`).childNodes.forEach((e) => e.disabled = disabled);
-    };
+    const changeButton = (id, disabled) => document.querySelector(`[data-button-action="${id}"]`).childNodes.forEach((e) => e.disabled = disabled);
 
     const remove = async (button) => {
         if (!confirm('Are you sure?')) {
@@ -77,7 +75,7 @@ export const comment = (() => {
             isChecklist = badge.classList.contains('text-success');
         }
 
-        if (id && form.value === form.getAttribute('data-original') && isChecklist === isPresent) {
+        if (id && util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
             return;
@@ -112,7 +110,15 @@ export const comment = (() => {
         if (status) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
-            document.getElementById(`content-${id}`).innerHTML = card.convertMarkdownToHTML(util.escapeHtml(form.value));
+
+            const show = document.querySelector(`[onclick="comment.showMore(this, '${id}')"]`);
+            const original = card.convertMarkdownToHTML(util.escapeHtml(form.value));
+            const content = document.getElementById(`content-${id}`);
+
+            content.innerHTML = show && show.getAttribute('data-show') == 'false' ? original.slice(0, 200) + '...' : original;
+            if (original.length > 200) {
+                content.setAttribute('data-comment', util.base64Encode(original));
+            }
 
             if (presence) {
                 document.getElementById('form-presence').value = isPresent ? '1' : '2';
@@ -307,8 +313,9 @@ export const comment = (() => {
                 }
 
                 document.getElementById(`button-${id}`).insertAdjacentElement('afterend', card.renderEdit(id, res.data.presence));
-                document.getElementById(`form-inner-${id}`).value = res.data.comment;
-                document.getElementById(`form-inner-${id}`).setAttribute('data-original', res.data.comment);
+                const formInner = document.getElementById(`form-inner-${id}`);
+                formInner.value = res.data.comment;
+                formInner.setAttribute('data-original', util.base64Encode(res.data.comment));
             });
 
         btn.restore();
@@ -402,6 +409,16 @@ export const comment = (() => {
         }
     };
 
+    const showMore = (anchor, uuid) => {
+        const comment = document.getElementById(`content-${uuid}`);
+        const original = util.base64Decode(comment.getAttribute('data-comment'));
+        const isCollapsed = anchor.getAttribute('data-show') === 'false';
+
+        comment.innerHTML = isCollapsed ? original : original.slice(0, 200) + '...';
+        anchor.innerText = isCollapsed ? 'Sebagian' : 'Selengkapnya';
+        anchor.setAttribute('data-show', isCollapsed ? 'true' : 'false');
+    };
+
     const fetchTracker = (comment) => {
         if (comment.comments) {
             comment.comments.forEach(fetchTracker);
@@ -458,6 +475,7 @@ export const comment = (() => {
         remove,
         update,
         comment,
+        showMore,
         showOrHide,
     };
 })();
