@@ -115,8 +115,8 @@ export const comment = (() => {
             const original = card.convertMarkdownToHTML(util.escapeHtml(form.value));
             const content = document.getElementById(`content-${id}`);
 
-            content.innerHTML = show && show.getAttribute('data-show') == 'false' ? original.slice(0, 200) + '...' : original;
-            if (original.length > 200) {
+            content.innerHTML = show && show.getAttribute('data-show') == 'false' ? original.slice(0, card.maxCommentLength) + '...' : original;
+            if (original.length > card.maxCommentLength) {
                 content.setAttribute('data-comment', util.base64Encode(original));
             }
 
@@ -277,7 +277,7 @@ export const comment = (() => {
             isChecklist = badge.classList.contains('text-success');
         }
 
-        if (form.value.length === 0 || (form.value === form.getAttribute('data-original') && isChecklist === isPresent) || confirm('Are you sure?')) {
+        if (form.value.length === 0 || (util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) || confirm('Are you sure?')) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
         }
@@ -414,7 +414,7 @@ export const comment = (() => {
         const original = util.base64Decode(comment.getAttribute('data-comment'));
         const isCollapsed = anchor.getAttribute('data-show') === 'false';
 
-        comment.innerHTML = isCollapsed ? original : original.slice(0, 200) + '...';
+        comment.innerHTML = isCollapsed ? original : original.slice(0, card.maxCommentLength) + '...';
         anchor.innerText = isCollapsed ? 'Sebagian' : 'Selengkapnya';
         anchor.setAttribute('data-show', isCollapsed ? 'true' : 'false');
     };
