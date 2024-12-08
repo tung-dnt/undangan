@@ -210,15 +210,6 @@ export const theme = (() => {
         } else {
             onLight();
         }
-
-        const toggle = document.getElementById('darkMode');
-        if (toggle) {
-            toggle.checked = isDarkMode();
-
-            if (!isAuto) {
-                toggle.parentElement.remove();
-            }
-        }
     };
 
     return {
