@@ -252,11 +252,13 @@ export const admin = (() => {
 
         try {
             // window.atob can throw error
-            if (!session.isAdmin() || !session.getToken() || (JSON.parse(window.atob((session.getToken()).split('.')[1]))?.exp ?? 0) < (Date.now() / 1000)) {
+            if (!session.isAdmin() || !session.getToken() || (JSON.parse(window.atob(session.getToken().split('.')[1]))?.exp ?? 0) < (Date.now() / 1000)) {
                 throw new Error('invalid token');
             }
         } catch {
             bootstrap.Modal.getOrCreateInstance('#loginModal').show();
+            session.logout();
+            user.clear();
             return;
         }
 

@@ -109,7 +109,7 @@ export const util = (() => {
 
     const base64Decode = (str) => {
         const decoder = new TextDecoder();
-        const decodedBytes = Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+        const decodedBytes = Uint8Array.from(window.atob(str), (c) => c.charCodeAt(0));
         return decoder.decode(decodedBytes);
     };
 
