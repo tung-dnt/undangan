@@ -76,8 +76,8 @@ export const request = (method, path) => {
                     return res.blob().then((blob) => ({ blob, filename }));
                 })
                 .then((res) => {
-                    if (!res) {
-                        return null;
+                    if (res === null) {
+                        return false;
                     }
 
                     const { blob, filename } = res;
@@ -93,6 +93,8 @@ export const request = (method, path) => {
 
                     document.body.removeChild(link);
                     window.URL.revokeObjectURL(href);
+
+                    return true;
                 })
                 .catch((err) => {
                     alert(err);

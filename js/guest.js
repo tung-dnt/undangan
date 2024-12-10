@@ -113,7 +113,7 @@ export const guest = (() => {
 
         theme.spyTop();
         theme.showButtonChangeTheme();
-        setTimeout(animation, 1500);
+        util.timeOut(animation, 1500);
     };
 
     const init = () => {

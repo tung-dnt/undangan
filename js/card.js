@@ -13,7 +13,7 @@ export const card = (() => {
     let tracker = null;
     let showHide = null;
 
-    const maxCommentLength = 150;
+    const maxCommentLength = 250;
 
     const renderLoading = () => {
         const comments = document.getElementById('comments');
