@@ -49,6 +49,7 @@ export const session = (() => {
 
                 session.set('token', document.body.getAttribute('data-key'));
                 progress.complete('request');
+
                 return res;
             }).catch(() => {
                 progress.invalid('request');

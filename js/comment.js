@@ -107,37 +107,39 @@ export const comment = (() => {
 
         btn.restore();
 
-        if (status) {
-            changeButton(id, false);
-            document.getElementById(`inner-${id}`).remove();
-
-            const show = document.querySelector(`[onclick="comment.showMore(this, '${id}')"]`);
-            const original = card.convertMarkdownToHTML(util.escapeHtml(form.value));
-            const content = document.getElementById(`content-${id}`);
-
-            content.innerHTML = show && show.getAttribute('data-show') == 'false' ? original.slice(0, card.maxCommentLength) + '...' : original;
-            if (original.length > card.maxCommentLength) {
-                content.setAttribute('data-comment', util.base64Encode(original));
-            }
-
-            if (presence) {
-                document.getElementById('form-presence').value = isPresent ? '1' : '2';
-                storage('information').set('presence', isPresent);
-            }
-
-            if (!presence || !badge) {
-                return;
-            }
-
-            if (isPresent) {
-                badge.classList.remove('fa-circle-xmark', 'text-danger');
-                badge.classList.add('fa-circle-check', 'text-success');
-                return;
-            }
-
-            badge.classList.remove('fa-circle-check', 'text-success');
-            badge.classList.add('fa-circle-xmark', 'text-danger');
+        if (!status) {
+            return;
         }
+
+        changeButton(id, false);
+        document.getElementById(`inner-${id}`).remove();
+
+        const show = document.querySelector(`[onclick="comment.showMore(this, '${id}')"]`);
+        const original = card.convertMarkdownToHTML(util.escapeHtml(form.value));
+        const content = document.getElementById(`content-${id}`);
+
+        content.innerHTML = show && show.getAttribute('data-show') == 'false' ? original.slice(0, card.maxCommentLength) + '...' : original;
+        if (original.length > card.maxCommentLength) {
+            content.setAttribute('data-comment', util.base64Encode(original));
+        }
+
+        if (presence) {
+            document.getElementById('form-presence').value = isPresent ? '1' : '2';
+            storage('information').set('presence', isPresent);
+        }
+
+        if (!presence || !badge) {
+            return;
+        }
+
+        if (isPresent) {
+            badge.classList.remove('fa-circle-xmark', 'text-danger');
+            badge.classList.add('fa-circle-check', 'text-success');
+            return;
+        }
+
+        badge.classList.remove('fa-circle-check', 'text-success');
+        badge.classList.add('fa-circle-xmark', 'text-danger');
     };
 
     const send = async (button) => {
@@ -181,10 +183,11 @@ export const comment = (() => {
         const isPresence = presence ? presence.value === '1' : true;
 
         if (!session.isAdmin()) {
-            storage('information').set('name', nameValue);
+            const info = storage('information');
+            info.set('name', nameValue);
 
             if (!id) {
-                storage('information').set('presence', isPresence);
+                info.set('presence', isPresence);
             }
         }
 
@@ -259,7 +262,6 @@ export const comment = (() => {
 
             containerDiv.querySelector(`button[onclick="like.like(this)"][data-uuid="${id}"]`).insertAdjacentHTML('beforebegin', card.renderReadMore(id, anchorTag ? anchorTag.getAttribute('data-uuids').split(',').concat(uuids) : uuids));
         }
-
     };
 
     const cancel = (id) => {
@@ -332,6 +334,7 @@ export const comment = (() => {
             .send()
             .then((res) => {
                 pagination.setResultData(res.data.length);
+                comments.setAttribute('data-loading', 'false');
 
                 if (res.data.length === 0) {
                     comments.innerHTML = onNullComment;
@@ -353,26 +356,9 @@ export const comment = (() => {
                 };
 
                 showHide.set('hidden', traverse(res.data, showHide.get('hidden')));
-                return res;
-            })
-            .then((res) => {
-                if (res.data.length === 0) {
-                    return res;
-                }
-
-                const observer = new MutationObserver((mutationsList, o) => {
-                    for (const mutation of mutationsList) {
-                        if (mutation.type === 'childList' && session.isAdmin()) {
-                            res.data.forEach(fetchTracker);
-                            o.disconnect();
-                            break;
-                        }
-                    }
-                });
-
-                observer.observe(comments, { childList: true });
-                comments.setAttribute('data-loading', 'false');
                 comments.innerHTML = res.data.map((c) => card.renderContent(c)).join('');
+                res.data.forEach(fetchTracker);
+
                 return res;
             });
     };
@@ -420,6 +406,10 @@ export const comment = (() => {
     };
 
     const fetchTracker = (comment) => {
+        if (!session.isAdmin()) {
+            return;
+        }
+
         if (comment.comments) {
             comment.comments.forEach(fetchTracker);
         }

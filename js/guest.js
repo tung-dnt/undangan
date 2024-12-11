@@ -150,7 +150,7 @@ export const guest = (() => {
         session.guest()
             .then((res) => {
                 if (res.code !== 200) {
-                    return;
+                    return res;
                 }
 
                 return comment.comment()
