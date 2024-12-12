@@ -13,6 +13,8 @@ export const card = (() => {
     let tracker = null;
     let showHide = null;
 
+    const maxCommentLength = 250;
+
     const renderLoading = () => {
         const comments = document.getElementById('comments');
         if (comments.getAttribute('data-loading') === 'true') {
@@ -139,6 +141,8 @@ export const card = (() => {
 
     const renderBody = (comment, is_parent) => {
         const text = theme.isDarkMode('light', 'dark');
+        const original = convertMarkdownToHTML(util.escapeHtml(comment.comment));
+        const moreThanMaxLength = original.length > maxCommentLength;
 
         return `
         <div class="d-flex flex-wrap justify-content-between align-items-center">
@@ -146,7 +150,8 @@ export const card = (() => {
             <small class="text-${text} m-0 p-0" style="font-size: 0.75rem;">${comment.created_at}</small>
         </div>
         <hr class="text-${text} my-1">
-        <p class="text-${text} my-1 mx-0 p-0" style="white-space: pre-wrap !important; font-size: 0.95rem;" id="content-${comment.uuid}">${convertMarkdownToHTML(util.escapeHtml(comment.comment))}</p>`;
+        <p class="text-${text} my-1 mx-0 p-0" style="white-space: pre-wrap !important; font-size: 0.95rem;" ${moreThanMaxLength ? `data-comment="${util.base64Encode(original)}"` : ''} id="content-${comment.uuid}">${moreThanMaxLength ? (original.slice(0, maxCommentLength) + '...') : original}</p>
+        ${moreThanMaxLength ? `<p class="mb-2 mt-0 mx-0 p-0"><a class="text-${text}" role="button" style="font-size: 0.85rem;" data-show="false" onclick="comment.showMore(this, '${comment.uuid}')">Selengkapnya</a></p>` : ''}`;
     };
 
     const renderContent = (comment, is_parent) => {
@@ -161,9 +166,7 @@ export const card = (() => {
         </div>`;
     };
 
-    const renderInnerContent = (comment) => {
-        return renderContent(comment, false);
-    };
+    const renderInnerContent = (comment) => renderContent(comment, false);
 
     const renderReply = (id) => {
         const inner = document.createElement('div');
@@ -171,7 +174,7 @@ export const card = (() => {
         inner.id = `inner-${id}`;
         inner.innerHTML = `
         <label for="form-inner-${id}" class="form-label" style="font-size: 0.95rem;"><i class="fa-solid fa-reply me-1"></i>Reply</label>
-        <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" placeholder="Type reply comment" offline-disabled></textarea>
+        <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" placeholder="Type reply comment" rows="3" offline-disabled></textarea>
         <div class="d-flex flex-wrap justify-content-end align-items-center mb-0">
             <button style="font-size: 0.8rem;" onclick="comment.cancel('${id}')" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-4 py-0 me-1" offline-disabled>Cancel</button>
             <button style="font-size: 0.8rem;" onclick="comment.send(this)" data-uuid="${id}" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-4 py-0" offline-disabled>Send</button>
@@ -191,7 +194,7 @@ export const card = (() => {
             <option value="1" ${presence ? 'selected' : ''}>Datang</option>
             <option value="2" ${presence ? '' : 'selected'}>Berhalangan</option>
         </select>` : ''}
-        <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" data-original="" placeholder="Type update comment" offline-disabled></textarea>
+        <textarea class="form-control shadow-sm rounded-4 mb-2" id="form-inner-${id}" placeholder="Type update comment" rows="3" offline-disabled></textarea>
         <div class="d-flex flex-wrap justify-content-end align-items-center mb-0">
             <button style="font-size: 0.8rem;" onclick="comment.cancel('${id}')" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-4 py-0 me-1" offline-disabled>Cancel</button>
             <button style="font-size: 0.8rem;" onclick="comment.update(this)" data-uuid="${id}" class="btn btn-sm btn-outline-${theme.isDarkMode('light', 'dark')} rounded-4 py-0" offline-disabled>Update</button>
@@ -217,6 +220,7 @@ export const card = (() => {
         renderReadMore,
         renderInnerContent,
         renderContent: (comment) => renderContent(comment, true),
-        convertMarkdownToHTML
+        convertMarkdownToHTML,
+        maxCommentLength,
     };
 })();

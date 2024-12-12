@@ -38,11 +38,11 @@ export const request = (method, path) => {
                 .then((res) => {
                     return res.json().then((json) => {
                         if (res.status >= 500 && (json.message ?? json[0])) {
-                            throw json.message ?? json[0];
+                            throw new Error(json.message ?? json[0]);
                         }
 
                         if (json.error) {
-                            throw json.error[0];
+                            throw new Error(json.error[0]);
                         }
 
                         return json;
@@ -57,7 +57,7 @@ export const request = (method, path) => {
                 })
                 .catch((err) => {
                     alert(err);
-                    throw err;
+                    throw new Error(err);
                 });
         },
         download() {
@@ -76,8 +76,8 @@ export const request = (method, path) => {
                     return res.blob().then((blob) => ({ blob, filename }));
                 })
                 .then((res) => {
-                    if (!res) {
-                        return null;
+                    if (res === null) {
+                        return false;
                     }
 
                     const { blob, filename } = res;
@@ -93,10 +93,12 @@ export const request = (method, path) => {
 
                     document.body.removeChild(link);
                     window.URL.revokeObjectURL(href);
+
+                    return true;
                 })
                 .catch((err) => {
                     alert(err);
-                    throw err;
+                    throw new Error(err);
                 });
         },
         token(token) {

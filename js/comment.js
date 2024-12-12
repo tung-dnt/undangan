@@ -15,9 +15,7 @@ export const comment = (() => {
     let tracker = null;
     let showHide = null;
 
-    const changeButton = (id, disabled) => {
-        document.querySelector(`[data-button-action="${id}"]`).childNodes.forEach((e) => e.disabled = disabled);
-    };
+    const changeButton = (id, disabled) => document.querySelector(`[data-button-action="${id}"]`).childNodes.forEach((e) => e.disabled = disabled);
 
     const remove = async (button) => {
         if (!confirm('Are you sure?')) {
@@ -77,7 +75,7 @@ export const comment = (() => {
             isChecklist = badge.classList.contains('text-success');
         }
 
-        if (id && form.value === form.getAttribute('data-original') && isChecklist === isPresent) {
+        if (id && util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
             return;
@@ -109,29 +107,39 @@ export const comment = (() => {
 
         btn.restore();
 
-        if (status) {
-            changeButton(id, false);
-            document.getElementById(`inner-${id}`).remove();
-            document.getElementById(`content-${id}`).innerHTML = card.convertMarkdownToHTML(util.escapeHtml(form.value));
-
-            if (presence) {
-                document.getElementById('form-presence').value = isPresent ? '1' : '2';
-                storage('information').set('presence', isPresent);
-            }
-
-            if (!presence || !badge) {
-                return;
-            }
-
-            if (isPresent) {
-                badge.classList.remove('fa-circle-xmark', 'text-danger');
-                badge.classList.add('fa-circle-check', 'text-success');
-                return;
-            }
-
-            badge.classList.remove('fa-circle-check', 'text-success');
-            badge.classList.add('fa-circle-xmark', 'text-danger');
+        if (!status) {
+            return;
         }
+
+        changeButton(id, false);
+        document.getElementById(`inner-${id}`).remove();
+
+        const show = document.querySelector(`[onclick="comment.showMore(this, '${id}')"]`);
+        const original = card.convertMarkdownToHTML(util.escapeHtml(form.value));
+        const content = document.getElementById(`content-${id}`);
+
+        content.innerHTML = show && show.getAttribute('data-show') == 'false' ? original.slice(0, card.maxCommentLength) + '...' : original;
+        if (original.length > card.maxCommentLength) {
+            content.setAttribute('data-comment', util.base64Encode(original));
+        }
+
+        if (presence) {
+            document.getElementById('form-presence').value = isPresent ? '1' : '2';
+            storage('information').set('presence', isPresent);
+        }
+
+        if (!presence || !badge) {
+            return;
+        }
+
+        if (isPresent) {
+            badge.classList.remove('fa-circle-xmark', 'text-danger');
+            badge.classList.add('fa-circle-check', 'text-success');
+            return;
+        }
+
+        badge.classList.remove('fa-circle-check', 'text-success');
+        badge.classList.add('fa-circle-xmark', 'text-danger');
     };
 
     const send = async (button) => {
@@ -175,10 +183,11 @@ export const comment = (() => {
         const isPresence = presence ? presence.value === '1' : true;
 
         if (!session.isAdmin()) {
-            storage('information').set('name', nameValue);
+            const info = storage('information');
+            info.set('name', nameValue);
 
             if (!id) {
-                storage('information').set('presence', isPresence);
+                info.set('presence', isPresence);
             }
         }
 
@@ -253,7 +262,6 @@ export const comment = (() => {
 
             containerDiv.querySelector(`button[onclick="like.like(this)"][data-uuid="${id}"]`).insertAdjacentHTML('beforebegin', card.renderReadMore(id, anchorTag ? anchorTag.getAttribute('data-uuids').split(',').concat(uuids) : uuids));
         }
-
     };
 
     const cancel = (id) => {
@@ -271,7 +279,7 @@ export const comment = (() => {
             isChecklist = badge.classList.contains('text-success');
         }
 
-        if (form.value.length === 0 || (form.value === form.getAttribute('data-original') && isChecklist === isPresent) || confirm('Are you sure?')) {
+        if (form.value.length === 0 || (util.base64Encode(form.value) === form.getAttribute('data-original') && isChecklist === isPresent) || confirm('Are you sure?')) {
             changeButton(id, false);
             document.getElementById(`inner-${id}`).remove();
         }
@@ -307,8 +315,9 @@ export const comment = (() => {
                 }
 
                 document.getElementById(`button-${id}`).insertAdjacentElement('afterend', card.renderEdit(id, res.data.presence));
-                document.getElementById(`form-inner-${id}`).value = res.data.comment;
-                document.getElementById(`form-inner-${id}`).setAttribute('data-original', res.data.comment);
+                const formInner = document.getElementById(`form-inner-${id}`);
+                formInner.value = res.data.comment;
+                formInner.setAttribute('data-original', util.base64Encode(res.data.comment));
             });
 
         btn.restore();
@@ -318,13 +327,14 @@ export const comment = (() => {
     const comment = () => {
         card.renderLoading();
         const comments = document.getElementById('comments');
-        const onNullComment = `<div class="h6 text-center fw-bold p-4 my-2 bg-theme-${theme.isDarkMode('dark', 'light')} rounded-4 shadow">Yuk bagikan undangan ini biar banyak komentarnya</div>`;
+        const onNullComment = `<div class="text-center p-4 my-2 bg-theme-${theme.isDarkMode('dark', 'light')} rounded-4 shadow"><p class="fw-bold p-0 m-0">Yuk bagikan undangan ini biar banyak komentarnya</p></div>`;
 
         return request(HTTP_GET, `/api/comment?per=${pagination.getPer()}&next=${pagination.getNext()}`)
             .token(session.getToken())
             .send()
             .then((res) => {
                 pagination.setResultData(res.data.length);
+                comments.setAttribute('data-loading', 'false');
 
                 if (res.data.length === 0) {
                     comments.innerHTML = onNullComment;
@@ -346,26 +356,9 @@ export const comment = (() => {
                 };
 
                 showHide.set('hidden', traverse(res.data, showHide.get('hidden')));
-                return res;
-            })
-            .then((res) => {
-                if (res.data.length === 0) {
-                    return res;
-                }
-
-                const observer = new MutationObserver((mutationsList, o) => {
-                    for (const mutation of mutationsList) {
-                        if (mutation.type === 'childList' && session.isAdmin()) {
-                            res.data.forEach(fetchTracker);
-                            o.disconnect();
-                            break;
-                        }
-                    }
-                });
-
-                observer.observe(comments, { childList: true });
-                comments.setAttribute('data-loading', 'false');
                 comments.innerHTML = res.data.map((c) => card.renderContent(c)).join('');
+                res.data.forEach(fetchTracker);
+
                 return res;
             });
     };
@@ -402,7 +395,21 @@ export const comment = (() => {
         }
     };
 
+    const showMore = (anchor, uuid) => {
+        const comment = document.getElementById(`content-${uuid}`);
+        const original = util.base64Decode(comment.getAttribute('data-comment'));
+        const isCollapsed = anchor.getAttribute('data-show') === 'false';
+
+        comment.innerHTML = isCollapsed ? original : original.slice(0, card.maxCommentLength) + '...';
+        anchor.innerText = isCollapsed ? 'Sebagian' : 'Selengkapnya';
+        anchor.setAttribute('data-show', isCollapsed ? 'true' : 'false');
+    };
+
     const fetchTracker = (comment) => {
+        if (!session.isAdmin()) {
+            return;
+        }
+
         if (comment.comments) {
             comment.comments.forEach(fetchTracker);
         }
@@ -458,6 +465,7 @@ export const comment = (() => {
         remove,
         update,
         comment,
+        showMore,
         showOrHide,
     };
 })();

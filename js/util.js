@@ -8,16 +8,19 @@ export const util = (() => {
         let op = parseInt(element.style.opacity);
 
         let clear = null;
-        clear = setInterval(() => {
+        const callback = () => {
             if (op > 0) {
-                element.style.opacity = op.toString();
+                element.style.opacity = op.toFixed(3);
                 op -= speed;
-            } else {
-                clearInterval(clear);
-                clear = null;
-                element.remove();
+                return;
             }
-        }, 10);
+
+            clearInterval(clear);
+            clear = null;
+            element.remove();
+        };
+
+        clear = setInterval(callback, 10);
     };
 
     const escapeHtml = (unsafe) => {
@@ -27,6 +30,17 @@ export const util = (() => {
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#039;');
+    };
+
+    const timeOut = (callback, timeout) => {
+        let clear = null;
+        const c = () => {
+            callback();
+            clearTimeout(clear);
+            clear = null;
+        };
+
+        clear = setTimeout(c, timeout);
     };
 
     const disableButton = (button, message = 'Loading..') => {
@@ -58,11 +72,7 @@ export const util = (() => {
         };
     };
 
-    const animate = (svg, timeout, classes) => {
-        setTimeout(() => {
-            svg.classList.add(classes);
-        }, timeout);
-    };
+    const animate = (svg, timeout, classes) => timeOut(() => svg.classList.add(classes), timeout);
 
     const modal = (img) => {
         document.getElementById('show-modal-image').src = img.src;
@@ -90,15 +100,22 @@ export const util = (() => {
         const tmp = button.innerHTML;
         button.innerHTML = message ? message : '<i class="fa-solid fa-check"></i>';
 
-        let clear = null;
-        clear = setTimeout(() => {
+        timeOut(() => {
             button.disabled = false;
             button.innerHTML = tmp;
-
-            clearTimeout(clear);
-            clear = null;
-            return;
         }, timeout);
+    };
+
+    const base64Encode = (str) => {
+        const encoder = new TextEncoder();
+        const encodedBytes = encoder.encode(str);
+        return btoa(String.fromCharCode(...encodedBytes));
+    };
+
+    const base64Decode = (str) => {
+        const decoder = new TextDecoder();
+        const decodedBytes = Uint8Array.from(window.atob(str), (c) => c.charCodeAt(0));
+        return decoder.decode(decodedBytes);
     };
 
     const close = () => {
@@ -110,9 +127,12 @@ export const util = (() => {
         copy,
         close,
         modal,
+        timeOut,
         opacity,
         animate,
         escapeHtml,
+        base64Encode,
+        base64Decode,
         disableButton,
         addLoadingCheckbox,
     };

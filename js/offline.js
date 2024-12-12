@@ -98,9 +98,7 @@ export const offline = (() => {
         changeState();
     };
 
-    const isOnline = () => {
-        return online;
-    };
+    const isOnline = () => online;
 
     const addAbort = (callback) => {
         abort.push(callback);

@@ -30,9 +30,7 @@ export const admin = (() => {
             document.getElementById('editComment').checked = Boolean(res.data.can_edit);
             document.getElementById('deleteComment').checked = Boolean(res.data.can_delete);
         });
-    };
 
-    const getStatUser = () => {
         request(HTTP_GET, '/api/stats').token(session.getToken()).send().then((res) => {
             document.getElementById('count-comment').innerHTML = res.data.comments.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
             document.getElementById('count-like').innerHTML = res.data.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -205,6 +203,7 @@ export const admin = (() => {
 
     const login = async (button) => {
         const btn = util.disableButton(button);
+
         const formEmail = document.getElementById('loginEmail');
         const formPassword = document.getElementById('loginPassword');
 
@@ -214,7 +213,6 @@ export const admin = (() => {
         const res = await session.login(dto.postSessionRequest(formEmail.value, formPassword.value));
         if (res) {
             getUserDetail();
-            getStatUser();
             comment.comment();
             bootstrap.Modal.getOrCreateInstance('#loginModal').hide();
             formEmail.value = null;
@@ -252,13 +250,19 @@ export const admin = (() => {
         theme.spyTop();
         comment.init();
 
-        if (!session.isAdmin() || !session.getToken() || (JSON.parse(atob((session.getToken()).split('.')[1])).exp ?? 0) < (Date.now() / 1000)) {
+        try {
+            // window.atob can throw error
+            if (!session.isAdmin() || !session.getToken() || (JSON.parse(window.atob(session.getToken().split('.')[1]))?.exp ?? 0) < (Date.now() / 1000)) {
+                throw new Error('invalid token');
+            }
+        } catch {
             bootstrap.Modal.getOrCreateInstance('#loginModal').show();
+            session.logout();
+            user.clear();
             return;
         }
 
         getUserDetail();
-        getStatUser();
         comment.comment();
     };
 
@@ -266,8 +270,6 @@ export const admin = (() => {
         init,
         login,
         logout,
-        getUserDetail,
-        getStatUser,
         changeFilterBadWord,
         replyComment,
         editComment,
